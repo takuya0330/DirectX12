@@ -193,7 +193,7 @@ void D3D12Core::Initialize(HWND hwnd)
 
 void D3D12Core::UnInitialize()
 {
-
+	WaitGPU();
 }
 
 void D3D12Core::Reset()
@@ -253,7 +253,7 @@ void D3D12Core::Present()
 	swap_chain_->Present(1, 0);
 }
 
-void D3D12Core::WaitForIdle()
+void D3D12Core::WaitGPU()
 {
 	command_queue_->Signal(fence_.Get(), ++fence_value_);
 	if (fence_->GetCompletedValue() != fence_value_)

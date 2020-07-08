@@ -7,7 +7,7 @@ void System::Initialize(HWND hwnd)
 
 void System::UnInitialize()
 {
-
+	d3d12core_.UnInitialize();
 }
 
 void System::Update()
@@ -29,5 +29,5 @@ void System::Render()
 		D3D12_RESOURCE_STATE_PRESENT);
 
 	d3d12core_.Present();
-	d3d12core_.WaitForIdle();
+	d3d12core_.WaitGPU();
 }

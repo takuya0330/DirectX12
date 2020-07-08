@@ -23,7 +23,7 @@ public:
 	void Barrier(D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after);
 	void ClearScreen();
 	void Present();
-	void WaitForIdle();
+	void WaitGPU();
 
 public:
 	ID3D12Device*					GetDevice()const					{ return device_.Get(); }
@@ -38,7 +38,7 @@ private:
 
 	struct RenderTarget
 	{
-		static constexpr UINT										 kFrameCount = 2;
+		static constexpr UINT										 kFrameCount = 3;
 		Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>			 descriptor_heap_;
 		std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> resource_;
 		UINT																 descriptor_size_;

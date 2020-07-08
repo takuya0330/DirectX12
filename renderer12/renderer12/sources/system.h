@@ -24,4 +24,4 @@ private:
 	friend SingletonHolder<System>;
 };
 
-using shSystem = SingletonHolder<System>;
+using Library = SingletonHolder<System>;

@@ -87,8 +87,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int CmdShow)
 	ShowWindow(hwnd, CmdShow);
 	ShowCursor(kShowCursor);
 
-	shSystem::Create();
-	shSystem::Ref().Initialize(hwnd);
+	Library::Create();
+	Library::Ref().Initialize(hwnd);
 
 	MSG msg = {};
 	while (WM_QUIT != msg.message)
@@ -100,13 +100,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int CmdShow)
 		}
 		else
 		{
-			shSystem::Ref().Update();
-			shSystem::Ref().Render();
+			Library::Ref().Update();
+			Library::Ref().Render();
 		}
 	}
 
-	shSystem::Ref().UnInitialize();
-	shSystem::Destroy();
+	Library::Ref().UnInitialize();
+	Library::Destroy();
 
 	return 0;
 }
