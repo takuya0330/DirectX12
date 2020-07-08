@@ -32,10 +32,10 @@ namespace utility
 }
 
 #if _DEBUG
-#define ASSERT(expr, msg) \
+#define ASSERTION(expr, msg) \
 	(void)((!!(expr)) || \
 	(1 != _CrtDbgReport(_CRT_ASSERT, __FILE__, __LINE__, NULL, "%s", msg)) || \
 	(_CrtDbgBreak(), 0))
 #else
-#define ASSERT(expr, expr_str) ((void)0)
+#define ASSERTION(expr, expr_str) ((void)0)
 #endif

@@ -19,27 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resources\resource.h" />
-    <ClInclude Include="sources\constants.h" />
-    <ClInclude Include="sources\core.h" />
-    <ClInclude Include="sources\math.h" />
-    <ClInclude Include="sources\scene.h" />
-    <ClInclude Include="sources\singleton.h" />
-    <ClInclude Include="sources\system.h" />
-    <ClInclude Include="sources\texture.h" />
-    <ClInclude Include="sources\utility.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="sources\core.cpp" />
-    <ClCompile Include="sources\main.cpp" />
-    <ClCompile Include="sources\system.cpp" />
-    <ClCompile Include="sources\texture.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="resources\test.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="resources\renderer12.rc" />
+    <ClCompile Include="library\source\main.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

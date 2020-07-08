@@ -3,7 +3,7 @@
 #include <time.h>
 #include <locale>
 
-#include "../resources/resource.h"
+#include "../resource/resource.h"
 #include "system.h"
 #include "constants.h"
 
@@ -15,27 +15,31 @@ namespace
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
-	PAINTSTRUCT ps;
-	HDC hdc;
-
 	switch (Msg)
 	{
 	case WM_PAINT:
+	{
+		PAINTSTRUCT ps;
+		HDC hdc;
 		hdc = BeginPaint(hWnd, &ps);
 		EndPaint(hWnd, &ps);
-		break;
+	}
+	break;
 	case WM_DESTROY:
+	{
 		PostQuitMessage(0);
-		break;
+	}
+	break;
 	case WM_KEYDOWN:
+	{
 		switch (wParam)
 		{
 		case VK_ESCAPE: PostMessage(hWnd, WM_CLOSE, 0, 0); break;
 		case VK_F11: break;
 		}
-		break;
-	default:
-		return DefWindowProc(hWnd, Msg, wParam, lParam);
+	}
+	break;
+	default: return DefWindowProc(hWnd, Msg, wParam, lParam);
 	}
 	return 0;
 }
@@ -74,8 +78,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int CmdShow)
 		"Renderer12",
 		kWindowTitle,
 		style,
-		CW_USEDEFAULT,
-		CW_USEDEFAULT,
+		0,
+		0,
 		static_cast<int>(rect.right - rect.left),
 		static_cast<int>(rect.bottom - rect.top),
 		nullptr,
@@ -87,9 +91,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int CmdShow)
 	ShowWindow(hwnd, CmdShow);
 	ShowCursor(kShowCursor);
 
-	Library::Create();
-	Library::Ref().Initialize(hwnd);
-
 	MSG msg = {};
 	while (WM_QUIT != msg.message)
 	{
@@ -100,13 +101,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int CmdShow)
 		}
 		else
 		{
-			Library::Ref().Update();
-			Library::Ref().Render();
+
 		}
 	}
-
-	Library::Ref().UnInitialize();
-	Library::Destroy();
 
 	return 0;
 }

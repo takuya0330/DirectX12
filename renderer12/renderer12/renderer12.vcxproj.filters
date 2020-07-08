@@ -1,66 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="sources">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="resources">
+    <Filter Include="library">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
+    <Filter Include="game">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="library\source">
+      <UniqueIdentifier>{738cf763-f212-4a48-bd7f-991b9562d1cc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="sources\constants.h">
-      <Filter>sources</Filter>
-    </ClInclude>
-    <ClInclude Include="resources\resource.h">
-      <Filter>resources</Filter>
-    </ClInclude>
-    <ClInclude Include="sources\utility.h">
-      <Filter>sources</Filter>
-    </ClInclude>
-    <ClInclude Include="sources\core.h">
-      <Filter>sources</Filter>
-    </ClInclude>
-    <ClInclude Include="sources\system.h">
-      <Filter>sources</Filter>
-    </ClInclude>
-    <ClInclude Include="sources\singleton.h">
-      <Filter>sources</Filter>
-    </ClInclude>
-    <ClInclude Include="sources\math.h">
-      <Filter>sources</Filter>
-    </ClInclude>
-    <ClInclude Include="sources\texture.h">
-      <Filter>sources</Filter>
-    </ClInclude>
-    <ClInclude Include="sources\scene.h">
-      <Filter>sources</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="sources\main.cpp">
-      <Filter>sources</Filter>
+    <ClCompile Include="library\source\main.cpp">
+      <Filter>library\source</Filter>
     </ClCompile>
-    <ClCompile Include="sources\core.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
-    <ClCompile Include="sources\system.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
-    <ClCompile Include="sources\texture.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="resources\test.ico">
-      <Filter>resources</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="resources\renderer12.rc">
-      <Filter>resources</Filter>
-    </ResourceCompile>
   </ItemGroup>
 </Project>
