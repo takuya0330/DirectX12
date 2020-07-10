@@ -3,14 +3,16 @@
 #include <time.h>
 #include <locale>
 
-#include "../resource/resource.h"
-#include "system.h"
-#include "constants.h"
+#include "icon/resource.h"
+#include "core.h"
 
 namespace
 {
-	constexpr const char* kWindowTitle = "Renderer12";
+	constexpr const char* kWindowTitle = "dx12";
 	constexpr bool kShowCursor = true;
+
+	constexpr UINT kWindowWidth = 1600;
+	constexpr UINT kWindowHeight = 900;
 }
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
@@ -65,17 +67,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int CmdShow)
 		wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
 		wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 		wcex.lpszMenuName = nullptr;
-		wcex.lpszClassName = L"Renderer12";
+		wcex.lpszClassName = L"dx12";
 		wcex.hIconSm = LoadIcon(wcex.hInstance, reinterpret_cast<LPCWSTR>(IDI_ICON1));
 	}
 	RegisterClassEx(&wcex);
-	RECT rect = { 0, 0, constants::kResolution.x, constants::kResolution.y };
+	RECT rect = { 0, 0, kWindowWidth, kWindowHeight };
 	DWORD style = WS_OVERLAPPEDWINDOW ^ WS_MAXIMIZEBOX ^ WS_THICKFRAME | WS_VISIBLE;
 	AdjustWindowRect(&rect, style, false);
 
 	HWND hwnd = CreateWindowA
 	(
-		"Renderer12",
+		"dx12",
 		kWindowTitle,
 		style,
 		0,
@@ -90,6 +92,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int CmdShow)
 
 	ShowWindow(hwnd, CmdShow);
 	ShowCursor(kShowCursor);
+
+	snd::detail::core core_;
+	core_.initialize(hwnd, kWindowWidth, kWindowHeight);
 
 	MSG msg = {};
 	while (WM_QUIT != msg.message)
