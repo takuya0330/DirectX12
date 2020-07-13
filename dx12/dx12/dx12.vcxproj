@@ -18,6 +18,26 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="library\core.cpp" />
+    <ClCompile Include="library\descriptor_heap.cpp" />
+    <ClCompile Include="library\device.cpp" />
+    <ClCompile Include="library\entry_point.cpp" />
+    <ClCompile Include="library\main.cpp" />
+    <ClCompile Include="library\renderer.cpp" />
+    <ClCompile Include="library\resource.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="library\constants.h" />
+    <ClInclude Include="library\core.h" />
+    <ClInclude Include="library\descriptor_heap.h" />
+    <ClInclude Include="library\device.h" />
+    <ClInclude Include="library\math.h" />
+    <ClInclude Include="library\renderer.h" />
+    <ClInclude Include="library\resource.h" />
+    <ClInclude Include="library\singleton.h" />
+    <ClInclude Include="library\utility.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -144,20 +164,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="commands.cpp" />
-    <ClCompile Include="core.cpp" />
-    <ClCompile Include="descriptor_heap.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="resource.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="commands.h" />
-    <ClInclude Include="core.h" />
-    <ClInclude Include="descriptor_heap.h" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="utility.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

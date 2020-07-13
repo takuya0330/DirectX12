@@ -3,7 +3,7 @@
 #include <time.h>
 #include <locale>
 
-#include "icon/resource.h"
+#include "../icon/resource.h"
 #include "core.h"
 
 namespace
@@ -14,6 +14,8 @@ namespace
 	constexpr UINT kWindowWidth = 1600;
 	constexpr UINT kWindowHeight = 900;
 }
+
+extern void Main();
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
@@ -93,22 +95,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int CmdShow)
 	ShowWindow(hwnd, CmdShow);
 	ShowCursor(kShowCursor);
 
-	snd::detail::core core_;
-	core_.initialize(hwnd, kWindowWidth, kWindowHeight);
+	snd::Core::Create();
+	snd::Core::Ref().Initialize(hwnd);
 
-	MSG msg = {};
-	while (WM_QUIT != msg.message)
-	{
-		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-		else
-		{
+	Main();
 
-		}
-	}
+	snd::Core::Destroy();
 
 	return 0;
 }

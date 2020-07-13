@@ -5,7 +5,7 @@
 namespace snd::utility
 {
 #if _DEBUG
-	inline void print(const char* format, ...)
+	inline void Print(const char* format, ...)
 	{
 		va_list valist;
 		va_start(valist, format);
@@ -13,7 +13,7 @@ namespace snd::utility
 		va_end(valist);
 	}
 #else
-	inline void print(const char* format, ...) {}
+	inline void Print(const char* format, ...) {}
 #endif
 
 	inline LPWSTR whr_trace(HRESULT hr)
@@ -45,6 +45,16 @@ namespace snd::utility
 			NULL
 		);
 		return msg;
+	}
+
+	template<class T>
+	inline void SafeDelete(T* _Obj)
+	{
+		if (_Obj)
+		{
+			delete _Obj;
+			_Obj = nullptr;
+		}
 	}
 }
 
