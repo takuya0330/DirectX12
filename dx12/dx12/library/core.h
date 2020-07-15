@@ -19,11 +19,13 @@ namespace snd
 			void Initialize(HWND _hwnd);
 			bool Update();
 
+			HWND GetHWND()const { return hwnd_; }
 			Device* GetDevice()const { return device_; }
 			Renderer* GetRenderer()const { return renderer_; }
 		private:
 			friend SingletonHolder<System>;
 
+			HWND hwnd_;
 			Device* device_;
 			Renderer* renderer_;
 		};

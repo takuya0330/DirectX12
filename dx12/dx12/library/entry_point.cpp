@@ -3,12 +3,12 @@
 #include <time.h>
 #include <locale>
 
-#include "../icon/resource.h"
+#include "../resource/resource.h"
 #include "core.h"
 
 namespace
 {
-	constexpr const char* kWindowTitle = "dx12";
+	constexpr const char* kWindowTitle = "snd";
 	constexpr bool kShowCursor = true;
 
 	constexpr UINT kWindowWidth = 1600;
@@ -69,7 +69,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int CmdShow)
 		wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
 		wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 		wcex.lpszMenuName = nullptr;
-		wcex.lpszClassName = L"dx12";
+		wcex.lpszClassName = L"snd";
 		wcex.hIconSm = LoadIcon(wcex.hInstance, reinterpret_cast<LPCWSTR>(IDI_ICON1));
 	}
 	RegisterClassEx(&wcex);
@@ -79,7 +79,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int CmdShow)
 
 	HWND hwnd = CreateWindowA
 	(
-		"dx12",
+		"snd",
 		kWindowTitle,
 		style,
 		0,

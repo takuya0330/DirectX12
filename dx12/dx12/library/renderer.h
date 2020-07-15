@@ -10,6 +10,13 @@
 #include "constants.h"
 #include "math.h"
 
+namespace snd
+{
+	class PipelineState;
+	class RootSignature;
+	class Texture;
+}
+
 namespace snd::detail
 {
 	class Renderer
@@ -26,6 +33,8 @@ namespace snd::detail
 		void SetViewport(uint2 _Resolution);
 		void Present(uint _sync = 1);
 		void WaitGPU();
+
+		void Draw(const Texture& _texture, const PipelineState& _pipeline_state, const RootSignature& _root_signature);
 	private:
 		uint current_back_buffer_;
 		Microsoft::WRL::ComPtr<IDXGISwapChain4> swap_chain_;

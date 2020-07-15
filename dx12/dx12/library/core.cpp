@@ -13,6 +13,8 @@ namespace snd::detail
 
 	void System::Initialize(HWND _hwnd)
 	{
+		hwnd_ = _hwnd;
+
 		device_ = new Device();
 		device_->Create();
 

@@ -3,6 +3,10 @@
 
 #include "../external/d3dx12/d3dx12.h"
 
+#include "texture.h"
+#include "pipeline_state.h"
+#include "root_signature.h"
+
 using namespace Microsoft::WRL;
 namespace snd::detail
 {
@@ -63,7 +67,7 @@ namespace snd::detail
 
 		D3D12_RENDER_TARGET_VIEW_DESC rtv_desc = {};
 		{
-			rtv_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+			rtv_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 			rtv_desc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 		}
 		for (uint i = 0; i < constants::kBackBufferCount; ++i)
@@ -76,10 +80,10 @@ namespace snd::detail
 		// デプスステンシルビューの作成
 		D3D12_DESCRIPTOR_HEAP_DESC ds_dh_desc = {};
 		{
-			ds_dh_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;	
-			ds_dh_desc.NumDescriptors = 1;							
+			ds_dh_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
+			ds_dh_desc.NumDescriptors = 1;
 			ds_dh_desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-			ds_dh_desc.NodeMask = 0;									
+			ds_dh_desc.NodeMask = 0;
 		}
 		ASSERT_SUCCEEDED(_device->CreateDescriptorHeap(&ds_dh_desc, IID_PPV_ARGS(&depth_stencil_.descriptor_heap_)));
 		CD3DX12_CPU_DESCRIPTOR_HANDLE ds_cpu_handle(depth_stencil_.descriptor_heap_->GetCPUDescriptorHandleForHeapStart());
@@ -159,5 +163,17 @@ namespace snd::detail
 			// イベントが発生するまで待つ
 			WaitForSingleObject(sync_.event_, INFINITE);
 		}
+	}
+
+	void Renderer::Draw(const Texture& _texture, const PipelineState& _pipeline_state, const RootSignature& _root_signature)
+	{
+		command_.list_->SetPipelineState(_pipeline_state.Get());
+		command_.list_->SetGraphicsRootSignature(_root_signature.Get());
+
+		command_.list_->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		command_.list_->IASetVertexBuffers(0, 1, &_texture.GetVertexBufferView());
+		command_.list_->IASetIndexBuffer(&_texture.GetIndexBufferView());
+
+		command_.list_->DrawIndexedInstanced(6, 1, 0, 0, 0);
 	}
 }

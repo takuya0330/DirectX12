@@ -5,6 +5,7 @@
 #include <d3d12.h>
 #include <dxgi1_6.h>
 #include <wrl.h>
+#include <iostream>
 
 namespace snd::detail
 {
@@ -15,6 +16,8 @@ namespace snd::detail
 		~Device() {}
 
 		void Create();
+
+		bool CompileShader(const std::wstring& _name, const std::string& _entry_point, const std::string& _shader_model, ID3DBlob** _blob);
 
 		ID3D12Device* GetD3D12Device()const { return device_.Get(); }
 		IDXGIFactory6* GetDXGIFactory()const { return factory_.Get(); }

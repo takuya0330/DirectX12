@@ -1,6 +1,9 @@
 #include "device.h"
 #include "utility.h"
 
+#include <d3dcompiler.h>
+#pragma comment(lib, "d3dcompiler.lib")
+
 using namespace Microsoft::WRL;
 namespace snd::detail
 {
@@ -71,5 +74,37 @@ namespace snd::detail
 			}
 #endif
 		}
+	}
+
+	bool Device::CompileShader(const std::wstring& _name, const std::string& _entry_point, const std::string& _shader_model, ID3DBlob** _blob)
+	{
+		ComPtr<ID3DBlob> err_msg;
+		UINT compile_flag = D3DCOMPILE_ENABLE_STRICTNESS;
+#if defined _DEBUG | DEBUG
+		compile_flag |= D3DCOMPILE_DEBUG;
+#endif
+		HRESULT hr = D3DCompileFromFile(_name.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, _entry_point.c_str(), _shader_model.c_str(), compile_flag, 0, _blob, err_msg.GetAddressOf());
+		if (FAILED(hr))
+		{
+			if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
+			{
+				OutputDebugStringA("ファイルが見当たりません。");
+			}
+			else
+			{
+				std::string err_str;
+				err_str.resize(err_msg->GetBufferSize()); // サイズ確保
+
+				// データコピー
+				std::copy_n((char*)err_msg->GetBufferPointer(), err_msg->GetBufferSize(), err_str.begin());
+				err_str += "\n";
+
+				OutputDebugStringA(err_str.c_str());
+			}
+
+			return false;
+		}
+
+		return true;
 	}
 }

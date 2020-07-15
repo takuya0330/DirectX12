@@ -29,6 +29,27 @@
     <Filter Include="library\resource">
       <UniqueIdentifier>{d527b666-f977-4d88-bbcb-594d194c7acd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="library\scene">
+      <UniqueIdentifier>{8d6bda78-68dd-422b-b23e-2de9afd63480}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="project">
+      <UniqueIdentifier>{8f013ab1-38ee-4088-aa4b-9879db85041f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="library\texture">
+      <UniqueIdentifier>{1765ec67-08ef-4d77-96e8-920bf2dcea60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="library\pipeline_state">
+      <UniqueIdentifier>{59e21738-431b-4ddd-9fae-408dcc904a1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="library\root_signature">
+      <UniqueIdentifier>{d975b0f9-d730-42b8-bcf1-ccd06cdbc7f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="hlsl">
+      <UniqueIdentifier>{45d762eb-42e5-4bd3-ae62-2b69e88cde85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="library\frame_rate">
+      <UniqueIdentifier>{84e946b9-a128-41f3-a9a6-3e6e66cbaad2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="library\core.cpp">
@@ -51,6 +72,18 @@
     </ClCompile>
     <ClCompile Include="library\renderer.cpp">
       <Filter>library\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="library\texture.cpp">
+      <Filter>library\texture</Filter>
+    </ClCompile>
+    <ClCompile Include="library\pipeline_state.cpp">
+      <Filter>library\pipeline_state</Filter>
+    </ClCompile>
+    <ClCompile Include="library\root_signature.cpp">
+      <Filter>library\root_signature</Filter>
+    </ClCompile>
+    <ClCompile Include="library\frame_rate.cpp">
+      <Filter>library\frame_rate</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -81,5 +114,36 @@
     <ClInclude Include="library\constants.h">
       <Filter>library\misc</Filter>
     </ClInclude>
+    <ClInclude Include="library\scene.h">
+      <Filter>library\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="library\texture.h">
+      <Filter>library\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="library\blend_state.h">
+      <Filter>library\pipeline_state</Filter>
+    </ClInclude>
+    <ClInclude Include="library\pipeline_state.h">
+      <Filter>library\pipeline_state</Filter>
+    </ClInclude>
+    <ClInclude Include="library\root_signature.h">
+      <Filter>library\root_signature</Filter>
+    </ClInclude>
+    <ClInclude Include="library\frame_rate.h">
+      <Filter>library\frame_rate</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="hlsl\texture.hlsli">
+      <Filter>hlsl</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="hlsl\texture_ps.hlsl">
+      <Filter>hlsl</Filter>
+    </FxCompile>
+    <FxCompile Include="hlsl\texture_vs.hlsl">
+      <Filter>hlsl</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
