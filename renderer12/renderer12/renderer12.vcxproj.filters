@@ -33,6 +33,12 @@
     <ClCompile Include="library\source\core.cpp">
       <Filter>library</Filter>
     </ClCompile>
+    <ClCompile Include="library\source\root_signature.cpp">
+      <Filter>library</Filter>
+    </ClCompile>
+    <ClCompile Include="library\source\buffer.cpp">
+      <Filter>library</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="library\source\device.h">
@@ -57,6 +63,12 @@
       <Filter>library\shader</Filter>
     </ClInclude>
     <ClInclude Include="library\source\singleton.h">
+      <Filter>library\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="library\source\root_signature.h">
+      <Filter>library\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="library\source\buffer.h">
       <Filter>library\shader</Filter>
     </ClInclude>
   </ItemGroup>

@@ -144,19 +144,23 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="library\main.cpp" />
+    <ClCompile Include="library\source\buffer.cpp" />
     <ClCompile Include="library\source\core.cpp" />
     <ClCompile Include="library\source\device.cpp" />
     <ClCompile Include="library\source\entry_point.cpp" />
     <ClCompile Include="library\source\frame_rate.cpp" />
     <ClCompile Include="library\source\renderer.cpp" />
+    <ClCompile Include="library\source\root_signature.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="library\source\buffer.h" />
     <ClInclude Include="library\source\constants.h" />
     <ClInclude Include="library\source\core.h" />
     <ClInclude Include="library\source\device.h" />
     <ClInclude Include="library\source\frame_rate.h" />
     <ClInclude Include="library\source\math.h" />
     <ClInclude Include="library\source\renderer.h" />
+    <ClInclude Include="library\source\root_signature.h" />
     <ClInclude Include="library\source\singleton.h" />
     <ClInclude Include="library\source\utility.h" />
   </ItemGroup>

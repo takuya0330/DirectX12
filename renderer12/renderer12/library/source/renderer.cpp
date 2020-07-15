@@ -1,4 +1,4 @@
-#include "../../external/d3dx12/d3dx12.h"
+#include "../external/d3dx12/d3dx12.h"
 
 #include "renderer.h"
 #include "utility.h"
