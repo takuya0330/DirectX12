@@ -19,7 +19,7 @@ namespace snd::detail
 		device_->Create();
 
 		renderer_ = new Renderer();
-		renderer_->Create(_hwnd, device_->GetD3D12Device(), device_->GetDXGIFactory());
+		renderer_->Create(hwnd_, device_->Get(), device_->GetFactory());
 	}
 
 	bool System::Update()
@@ -27,15 +27,8 @@ namespace snd::detail
 		MSG msg = {};
 		while (WM_QUIT != msg.message)
 		{
-			if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-			{
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
-			}
-			else
-			{
-				return true;
-			}
+			if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) { TranslateMessage(&msg); DispatchMessage(&msg); }
+			else return true;
 		}
 		return false;
 	}

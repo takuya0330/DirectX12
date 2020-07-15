@@ -8,7 +8,7 @@
 #include <thread>
 #include <sstream>
 
-namespace snd::detail
+namespace snd
 {
 	FrameRate::FrameRate(int _MaxFPS)
 	{

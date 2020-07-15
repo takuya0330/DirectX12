@@ -6,7 +6,7 @@
 #include <Windows.h>
 #include <chrono>
 
-namespace snd::detail
+namespace snd
 {
 	class FrameRate
 	{

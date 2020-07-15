@@ -1,14 +1,20 @@
+#pragma comment(lib, "d3dcompiler.lib")
+#include <d3dcompiler.h>
+
 #include "device.h"
 #include "utility.h"
 
-#include <d3dcompiler.h>
-#pragma comment(lib, "d3dcompiler.lib")
-
 using namespace Microsoft::WRL;
-namespace snd::detail
+namespace snd
 {
 	void Device::Create()
 	{
+		if (device_ && factory_)
+		{
+			utility::Print("既に作成されています。");
+			return;
+		}
+
 		// デバッグレイヤー有効化
 #if _DEBUG
 		constexpr UINT dxgi_flags = DXGI_CREATE_FACTORY_DEBUG;
@@ -20,14 +26,13 @@ namespace snd::detail
 #else 
 		constexpr UINT dxgi_flags = 0;
 #endif
+		// ファクトリーの作成
+		ComPtr<IDXGIFactory2> factory;
+		ASSERT_MESSAGE(CreateDXGIFactory2(dxgi_flags, IID_PPV_ARGS(&factory)), "CreateDXGIFactory2() failed.");
+		ASSERT_MESSAGE(factory.As(&factory_), "CreateDXGIFactory2::As() failed.");
 
 		// フィーチャーレベルの設定
 		constexpr D3D_FEATURE_LEVEL kFeatureLevel = D3D_FEATURE_LEVEL_11_0;
-
-		// ファクトリーの作成
-		ComPtr<IDXGIFactory2> factory;
-		ASSERT_SUCCEEDED(CreateDXGIFactory2(dxgi_flags, IID_PPV_ARGS(&factory)));
-		ASSERT_SUCCEEDED(factory.As(&factory_));
 
 		// アダプターの検索
 		ComPtr<IDXGIAdapter1> adapter;
@@ -45,7 +50,7 @@ namespace snd::detail
 		}
 
 		// デバイスの作成
-		ASSERT_SUCCEEDED(D3D12CreateDevice(adapter.Get(), kFeatureLevel, IID_PPV_ARGS(&device_)));
+		ASSERT_MESSAGE(D3D12CreateDevice(adapter.Get(), kFeatureLevel, IID_PPV_ARGS(&device_)), "D3D12CreateDevice() failed.");
 
 		// デバッグ設定
 		{
@@ -74,6 +79,8 @@ namespace snd::detail
 			}
 #endif
 		}
+
+		utility::Print("snd::Device created.");
 	}
 
 	bool Device::CompileShader(const std::wstring& _name, const std::string& _entry_point, const std::string& _shader_model, ID3DBlob** _blob)
@@ -88,7 +95,7 @@ namespace snd::detail
 		{
 			if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
 			{
-				OutputDebugStringA("ファイルが見当たりません。");
+				utility::Print("file not found.");
 			}
 			else
 			{
@@ -104,7 +111,6 @@ namespace snd::detail
 
 			return false;
 		}
-
 		return true;
 	}
 }

@@ -5,11 +5,11 @@
 
 namespace snd
 {
+	class Device;
+	class Renderer;
+
 	namespace detail
 	{
-		class Device;
-		class Renderer;
-
 		class System
 		{
 		public:

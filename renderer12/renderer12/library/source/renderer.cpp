@@ -1,17 +1,19 @@
+#include "../../external/d3dx12/d3dx12.h"
+
 #include "renderer.h"
 #include "utility.h"
 
-#include "../external/d3dx12/d3dx12.h"
-
-#include "texture.h"
-#include "pipeline_state.h"
-#include "root_signature.h"
-
 using namespace Microsoft::WRL;
-namespace snd::detail
+namespace snd
 {
 	void Renderer::Create(HWND _hwnd, ID3D12Device* _device, IDXGIFactory6* _factory)
 	{
+		if (swap_chain_)
+		{
+			utility::Print("既に作成されています。");
+			return;
+		}
+
 		// コマンドキューの作成
 		D3D12_COMMAND_QUEUE_DESC queue_desc = {};
 		{
@@ -20,13 +22,13 @@ namespace snd::detail
 			queue_desc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;				// タイムアウト無し
 			queue_desc.NodeMask = 0;												// アダプターが１つなら０でよし
 		}
-		ASSERT_SUCCEEDED(_device->CreateCommandQueue(&queue_desc, IID_PPV_ARGS(&command_.queue_)));
+		ASSERT_MESSAGE(_device->CreateCommandQueue(&queue_desc, IID_PPV_ARGS(&command_.queue_)), "CreateCommandQueue() failed.");
 
 		// コマンドアロケーターの作成
-		ASSERT_SUCCEEDED(_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&command_.allocator_)));
+		ASSERT_MESSAGE(_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&command_.allocator_)), "CreateCommandAllocator() failed.");
 
 		// コマンドリストの作成
-		ASSERT_SUCCEEDED(_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, command_.allocator_.Get(), nullptr, IID_PPV_ARGS(&command_.list_)));
+		ASSERT_MESSAGE(_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, command_.allocator_.Get(), nullptr, IID_PPV_ARGS(&command_.list_)), "CreateCommandList() failed.");
 		command_.list_->Close();
 
 		// スワップチェインの作成
@@ -46,12 +48,12 @@ namespace snd::detail
 			swap_chain_desc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 		}
 		ComPtr<IDXGISwapChain1> swap_chain;
-		ASSERT_SUCCEEDED(_factory->CreateSwapChainForHwnd(command_.queue_.Get(), _hwnd, &swap_chain_desc, nullptr, nullptr, swap_chain.GetAddressOf()));
+		ASSERT_MESSAGE(_factory->CreateSwapChainForHwnd(command_.queue_.Get(), _hwnd, &swap_chain_desc, nullptr, nullptr, swap_chain.GetAddressOf()), "CreateSwapChainForHwnd() failed.");
 
 		// Alt + Enter 禁止
 		_factory->MakeWindowAssociation(_hwnd, DXGI_MWA_NO_ALT_ENTER);
 
-		ASSERT_SUCCEEDED(swap_chain.As(&swap_chain_));
+		ASSERT_MESSAGE(swap_chain.As(&swap_chain_), "IDXGISwapChain1::As() failed.");
 
 		// レンダーターゲットの作成
 		D3D12_DESCRIPTOR_HEAP_DESC rt_dh_desc = {};
@@ -61,7 +63,7 @@ namespace snd::detail
 			rt_dh_desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;			// 特になし
 			rt_dh_desc.NodeMask = 0;												// 複数のGPUがある場合に識別するビットフラグ 
 		}
-		ASSERT_SUCCEEDED(_device->CreateDescriptorHeap(&rt_dh_desc, IID_PPV_ARGS(&render_target_.descriptor_heap_)));
+		ASSERT_MESSAGE(_device->CreateDescriptorHeap(&rt_dh_desc, IID_PPV_ARGS(&render_target_.descriptor_heap_)), "CreateDescriptorHeap() failed.");
 		CD3DX12_CPU_DESCRIPTOR_HANDLE rt_cpu_handle(render_target_.descriptor_heap_->GetCPUDescriptorHandleForHeapStart());
 		render_target_.increment_size_ = _device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 
@@ -72,7 +74,7 @@ namespace snd::detail
 		}
 		for (uint i = 0; i < constants::kBackBufferCount; ++i)
 		{
-			ASSERT_SUCCEEDED(swap_chain_->GetBuffer(i, IID_PPV_ARGS(&render_target_.buffers_[i])));
+			ASSERT_MESSAGE(swap_chain_->GetBuffer(i, IID_PPV_ARGS(&render_target_.buffers_[i])), "IDXGISwapChain4::GetBuffer() failed.");
 			_device->CreateRenderTargetView(render_target_.buffers_[i].Get(), &rtv_desc, rt_cpu_handle);
 			rt_cpu_handle.Offset(1, render_target_.increment_size_);
 		}
@@ -85,7 +87,7 @@ namespace snd::detail
 			ds_dh_desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 			ds_dh_desc.NodeMask = 0;
 		}
-		ASSERT_SUCCEEDED(_device->CreateDescriptorHeap(&ds_dh_desc, IID_PPV_ARGS(&depth_stencil_.descriptor_heap_)));
+		ASSERT_MESSAGE(_device->CreateDescriptorHeap(&ds_dh_desc, IID_PPV_ARGS(&depth_stencil_.descriptor_heap_)), "CreateDescriptorHeap() failed.");
 		CD3DX12_CPU_DESCRIPTOR_HANDLE ds_cpu_handle(depth_stencil_.descriptor_heap_->GetCPUDescriptorHandleForHeapStart());
 
 		CD3DX12_RESOURCE_DESC db_desc = CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_D32_FLOAT, constants::kResolution.x, constants::kResolution.y, 1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
@@ -95,7 +97,14 @@ namespace snd::detail
 			depth_clear_value.DepthStencil.Depth = 1.0f;
 			depth_clear_value.DepthStencil.Stencil = 0;
 		}
-		ASSERT_SUCCEEDED(_device->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT), D3D12_HEAP_FLAG_NONE, &db_desc, D3D12_RESOURCE_STATE_DEPTH_WRITE, &depth_clear_value, IID_PPV_ARGS(&depth_stencil_.buffer_)));
+		ASSERT_MESSAGE(_device->CreateCommittedResource(
+			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+			D3D12_HEAP_FLAG_NONE,
+			&db_desc,
+			D3D12_RESOURCE_STATE_DEPTH_WRITE,
+			&depth_clear_value,
+			IID_PPV_ARGS(&depth_stencil_.buffer_)),
+			"CreateCommittedResource() failed.");
 
 		D3D12_DEPTH_STENCIL_VIEW_DESC ds_desc = {};
 		{
@@ -106,7 +115,7 @@ namespace snd::detail
 		_device->CreateDepthStencilView(depth_stencil_.buffer_.Get(), &ds_desc, ds_cpu_handle);
 
 		// フェンスの作成
-		ASSERT_SUCCEEDED(_device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&sync_.fence_)));
+		ASSERT_MESSAGE(_device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&sync_.fence_)), "CreateFence() failed.");
 		sync_.event_ = CreateEvent(nullptr, false, false, nullptr);
 		sync_.value_ = 0;
 	}
@@ -163,17 +172,5 @@ namespace snd::detail
 			// イベントが発生するまで待つ
 			WaitForSingleObject(sync_.event_, INFINITE);
 		}
-	}
-
-	void Renderer::Draw(const Texture& _texture, const PipelineState& _pipeline_state, const RootSignature& _root_signature)
-	{
-		command_.list_->SetPipelineState(_pipeline_state.Get());
-		command_.list_->SetGraphicsRootSignature(_root_signature.Get());
-
-		command_.list_->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		command_.list_->IASetVertexBuffers(0, 1, &_texture.GetVertexBufferView());
-		command_.list_->IASetIndexBuffer(&_texture.GetIndexBufferView());
-
-		command_.list_->DrawIndexedInstanced(6, 1, 0, 0, 0);
 	}
 }

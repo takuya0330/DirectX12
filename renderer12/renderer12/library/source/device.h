@@ -7,7 +7,7 @@
 #include <wrl.h>
 #include <iostream>
 
-namespace snd::detail
+namespace snd
 {
 	class Device
 	{
@@ -16,11 +16,10 @@ namespace snd::detail
 		~Device() {}
 
 		void Create();
-
 		bool CompileShader(const std::wstring& _name, const std::string& _entry_point, const std::string& _shader_model, ID3DBlob** _blob);
 
-		ID3D12Device* GetD3D12Device()const { return device_.Get(); }
-		IDXGIFactory6* GetDXGIFactory()const { return factory_.Get(); }
+		ID3D12Device* Get()const { return device_.Get(); }
+		IDXGIFactory6* GetFactory()const { return factory_.Get(); }
 	private:
 		Microsoft::WRL::ComPtr<ID3D12Device> device_;
 		Microsoft::WRL::ComPtr<IDXGIFactory6> factory_;
