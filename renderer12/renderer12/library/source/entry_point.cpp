@@ -4,7 +4,7 @@
 #include <locale>
 
 #include "../resource/resource.h"
-#include "core.h"
+#include "system.h"
 
 namespace
 {
@@ -95,12 +95,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int CmdShow)
 	ShowWindow(hwnd, CmdShow);
 	ShowCursor(kShowCursor);
 
-	snd::Core::Create();
-	snd::Core::Ref().Initialize(hwnd);
+	snd::System::Create();
+	snd::System::Ref().Initialize(hwnd);
 
 	Main();
 
-	snd::Core::Destroy();
+	snd::System::Destroy();
 
 	return 0;
 }

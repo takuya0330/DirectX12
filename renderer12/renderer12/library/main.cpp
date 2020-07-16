@@ -1,30 +1,30 @@
-#include "source/core.h"
-#include "source/device.h"
-#include "source/renderer.h"
+#include "source/system.h"
+#include "source/graphics_core.h"
 #include "source/frame_rate.h"
 
 void Main()
 {
 	constexpr float clear_color[] = { 0,0,0,1 };
 
-	const HWND hwnd = snd::Core::Ref().GetHWND();
-	snd::Device* device = snd::Core::Ref().GetDevice();
-	snd::Renderer* renderer = snd::Core::Ref().GetRenderer();
+	const HWND hwnd = snd::System::Ref().GetHWND();
+
+	snd::GraphicsCore* graphics = snd::System::Ref().GetGraphicsCore();
 
 	snd::FrameRate frame_rate(0);
 
-	while (snd::Core::Ref().Update())
+	while (snd::System::Ref().Update())
 	{
 		frame_rate.Run();
 		frame_rate.ShowFPS(hwnd);
 
-		renderer->Reset();
-		renderer->Barrier(D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
-		renderer->Clear(clear_color);
-		renderer->SetViewport(snd::constants::kResolution);
+		graphics->Reset();
+		graphics->Barrier(D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+		
+		graphics->SetViewport(snd::constants::kResolution);
+		graphics->Clear(clear_color);
 
-		renderer->Barrier(D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
-		renderer->Present(0);
-		renderer->WaitGPU();
+		graphics->Barrier(D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
+		graphics->Present();
+		graphics->WaitForCommandQueue();
 	}
 }

@@ -8,44 +8,29 @@
 
 namespace snd
 {
-	namespace detail
+	class VertexBuffer
 	{
-		class Resource
-		{
-		public:
-			Resource() {}
-			virtual ~Resource() {}
-
-			void Create(ID3D12Device* _device, uint _size);
-			void Mapping(const void* _data, size_t _size);
-		protected:
-			Microsoft::WRL::ComPtr<ID3D12Resource> resource_;
-		};
-	}
-
-	class VertexBuffer : public detail::Resource
-	{
+		friend class GraphicsCore;
 	public:
 		VertexBuffer() {}
 		~VertexBuffer() {}
 
-		void Setup(uint _size, uint _stride);
-
 		D3D12_VERTEX_BUFFER_VIEW GetView()const { return view_; }
 	private:
+		Microsoft::WRL::ComPtr<ID3D12Resource> resource_;
 		D3D12_VERTEX_BUFFER_VIEW view_;
 	};
 
-	class IndexBuffer : public detail::Resource
+	class IndexBuffer
 	{
+		friend class GraphicsCore;
 	public:
 		IndexBuffer() {}
 		~IndexBuffer() {}
 
-		void Setup(uint _size);
-
 		D3D12_INDEX_BUFFER_VIEW GetView()const { return view_; }
 	private:
+		Microsoft::WRL::ComPtr<ID3D12Resource> resource_;
 		D3D12_INDEX_BUFFER_VIEW view_;
 	};
 }
