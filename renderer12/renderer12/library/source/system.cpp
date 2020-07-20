@@ -1,20 +1,20 @@
 #include "system.h"
-#include "graphics_core.h"
+#include "d3d12_core.h"
 #include "utility.h"
 
 namespace snd::detail
 {
 	Framework::~Framework()
 	{
-		utility::SafeDelete<GraphicsCore>(graphics_core_);
+		utility::SafeDelete<D3D12Core>(d3d12_core_);
 	}
 
 	void Framework::Initialize(HWND _hwnd)
 	{
 		hwnd_ = _hwnd;
 
-		graphics_core_ = new GraphicsCore();
-		graphics_core_->Initialize(hwnd_);
+		d3d12_core_ = new D3D12Core();
+		d3d12_core_->Initialize(hwnd_);
 
 	}
 

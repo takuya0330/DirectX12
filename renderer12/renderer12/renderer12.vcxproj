@@ -148,14 +148,14 @@
     <ClCompile Include="library\source\system.cpp" />
     <ClCompile Include="library\source\entry_point.cpp" />
     <ClCompile Include="library\source\frame_rate.cpp" />
-    <ClCompile Include="library\source\graphics_core.cpp" />
+    <ClCompile Include="library\source\d3d12_core.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="library\source\buffer.h" />
     <ClInclude Include="library\source\constants.h" />
     <ClInclude Include="library\source\system.h" />
     <ClInclude Include="library\source\frame_rate.h" />
-    <ClInclude Include="library\source\graphics_core.h" />
+    <ClInclude Include="library\source\d3d12_core.h" />
     <ClInclude Include="library\source\math.h" />
     <ClInclude Include="library\source\pipeline_state_object.h" />
     <ClInclude Include="library\source\singleton.h" />

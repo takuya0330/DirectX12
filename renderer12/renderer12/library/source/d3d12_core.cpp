@@ -1,6 +1,6 @@
 #include "../external/d3dx12/d3dx12.h"
 
-#include "graphics_core.h"
+#include "d3d12_core.h"
 //#include "buffer.h"
 //#include "pipeline_state_object.h"
 #include "utility.h"
@@ -106,7 +106,7 @@ namespace snd
 	ComPtr<ID3D12GraphicsCommandList> D3D12Core::CreateGraphicsCommandList(const D3D12_COMMAND_LIST_TYPE _type, ID3D12CommandAllocator* _allocator)
 	{
 		ComPtr<ID3D12GraphicsCommandList> list;
-		ASSERT_MESSAGE(device_->CreateCommandList(0, _type, _allocator, nullptr, IID_PPV_ARGS(list.ReleaseAndGetAddressOf())), "GraphicsCore::CreateGraphicsCommandList failed.");
+		ASSERT_MESSAGE(device_->CreateCommandList(0, _type, _allocator, nullptr, IID_PPV_ARGS(list.ReleaseAndGetAddressOf())), "D3D12Core::CreateGraphicsCommandList failed.");
 		return list;
 	}
 
@@ -119,14 +119,14 @@ namespace snd
 		desc.NodeMask = 0;
 
 		ComPtr<ID3D12DescriptorHeap> descriptor_heap;
-		ASSERT_MESSAGE(device_->CreateDescriptorHeap(&desc, IID_PPV_ARGS(descriptor_heap.ReleaseAndGetAddressOf())), "GraphicsCore::CreateDescriptorHeap failed.");
+		ASSERT_MESSAGE(device_->CreateDescriptorHeap(&desc, IID_PPV_ARGS(descriptor_heap.ReleaseAndGetAddressOf())), "D3D12Core::CreateDescriptorHeap failed.");
 		return descriptor_heap;
 	}
 
 	ComPtr<ID3D12Resource> D3D12Core::CreateResource(const D3D12_HEAP_TYPE _type, uint _size, const void* _data)
 	{
 		ComPtr<ID3D12Resource> resource;
-		ASSERT_MESSAGE(device_->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(_type), D3D12_HEAP_FLAG_NONE, &CD3DX12_RESOURCE_DESC::Buffer(_size), D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(resource.ReleaseAndGetAddressOf())), "GraphicsCore::CreateResource failed.");
+		ASSERT_MESSAGE(device_->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(_type), D3D12_HEAP_FLAG_NONE, &CD3DX12_RESOURCE_DESC::Buffer(_size), D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(resource.ReleaseAndGetAddressOf())), "D3D12Core::CreateResource failed.");
 
 		if(!_data) return resource;
 
@@ -139,7 +139,7 @@ namespace snd
 		return resource;
 	}
 
-	//VertexBuffer GraphicsCore::CreateVertexBuffer(const void* _data, uint _size, uint _stride)
+	//VertexBuffer D3D12Core::CreateVertexBuffer(const void* _data, uint _size, uint _stride)
 	//{
 	//	VertexBuffer v;
 	//	v.resource_ = CreateResource(D3D12_HEAP_TYPE_UPLOAD, _size, _data);
@@ -149,7 +149,7 @@ namespace snd
 	//	return v;
 	//}
 
-	//IndexBuffer GraphicsCore::CreateIndexBuffer(const void* _data, uint _size)
+	//IndexBuffer D3D12Core::CreateIndexBuffer(const void* _data, uint _size)
 	//{
 	//	IndexBuffer i;
 	//	i.resource_ = CreateResource(D3D12_HEAP_TYPE_UPLOAD, _size, _data);
@@ -159,7 +159,7 @@ namespace snd
 	//	return i;
 	//}
 
-	//PipelineStateObject GraphicsCore::CreatePipelineStateObject()
+	//PipelineStateObject D3D12Core::CreatePipelineStateObject()
 	//{
 	//	return PipelineStateObject{};
 	//}
@@ -203,7 +203,7 @@ namespace snd
 
 	void D3D12Core::CreateDevice(IDXGIAdapter1* _adapter, const D3D_FEATURE_LEVEL _feature_level)
 	{
-		ASSERT_MESSAGE(D3D12CreateDevice(_adapter, _feature_level, IID_PPV_ARGS(&device_)), "GraphicsCore::CreateDevice failed.");
+		ASSERT_MESSAGE(D3D12CreateDevice(_adapter, _feature_level, IID_PPV_ARGS(&device_)), "D3D12Core::CreateDevice failed.");
 	}
 
 	void D3D12Core::CreateSwapChain(IDXGIFactory4* _factory, HWND _hwnd)
@@ -274,7 +274,7 @@ namespace snd
 		depth_clear_value.DepthStencil.Depth = 1.0f;
 		depth_clear_value.DepthStencil.Stencil = 0;
 
-		ASSERT_MESSAGE(device_->CreateCommittedResource(&heap_properties, D3D12_HEAP_FLAG_NONE, &resource_desc, D3D12_RESOURCE_STATE_DEPTH_WRITE, &depth_clear_value, IID_PPV_ARGS(&depth_stencil_.buffer_)), "GraphicsCore::CreateDepthStencil failed.");
+		ASSERT_MESSAGE(device_->CreateCommittedResource(&heap_properties, D3D12_HEAP_FLAG_NONE, &resource_desc, D3D12_RESOURCE_STATE_DEPTH_WRITE, &depth_clear_value, IID_PPV_ARGS(&depth_stencil_.buffer_)), "D3D12Core::CreateDepthStencil failed.");
 
 		D3D12_DEPTH_STENCIL_VIEW_DESC desc = {};
 		desc.Format = resource_desc.Format;
@@ -287,7 +287,7 @@ namespace snd
 
 	void D3D12Core::CreateFence()
 	{
-		ASSERT_MESSAGE(device_->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&sync_.fence_)), "GraphicsCore::CreateFence failed.");
+		ASSERT_MESSAGE(device_->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&sync_.fence_)), "D3D12Core::CreateFence failed.");
 		sync_.event_ = CreateEvent(nullptr, false, false, nullptr);
 		sync_.value_ = 0;
 	}
@@ -295,7 +295,7 @@ namespace snd
 	ComPtr<IDXGIFactory4> D3D12Core::CreateFactory(uint _dxgi_flags)
 	{
 		ComPtr<IDXGIFactory4> factory;
-		ASSERT_MESSAGE(CreateDXGIFactory2(_dxgi_flags, IID_PPV_ARGS(factory.ReleaseAndGetAddressOf())), "GraphicsCore::CreateFactory failed.");
+		ASSERT_MESSAGE(CreateDXGIFactory2(_dxgi_flags, IID_PPV_ARGS(factory.ReleaseAndGetAddressOf())), "D3D12Core::CreateFactory failed.");
 		return factory;
 	}
 
@@ -326,14 +326,14 @@ namespace snd
 		desc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 		desc.NodeMask = 0;
 
-		ASSERT_MESSAGE(device_->CreateCommandQueue(&desc, IID_PPV_ARGS(queue.ReleaseAndGetAddressOf())), "GraphicsCore::CreateCommandQueue failed.");
+		ASSERT_MESSAGE(device_->CreateCommandQueue(&desc, IID_PPV_ARGS(queue.ReleaseAndGetAddressOf())), "D3D12Core::CreateCommandQueue failed.");
 		return queue;
 	}
 
 	ComPtr<ID3D12CommandAllocator> D3D12Core::CreateCommandAllocator(const D3D12_COMMAND_LIST_TYPE _type)
 	{
 		ComPtr<ID3D12CommandAllocator> allocator;
-		ASSERT_MESSAGE(device_->CreateCommandAllocator(_type, IID_PPV_ARGS(allocator.ReleaseAndGetAddressOf())), "GraphicsCore::CreateCommandAllocator failed.");
+		ASSERT_MESSAGE(device_->CreateCommandAllocator(_type, IID_PPV_ARGS(allocator.ReleaseAndGetAddressOf())), "D3D12Core::CreateCommandAllocator failed.");
 		return allocator;
 	}
 }

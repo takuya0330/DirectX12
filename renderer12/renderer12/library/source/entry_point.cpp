@@ -8,7 +8,7 @@
 
 namespace
 {
-	constexpr const char* kWindowTitle = "snd";
+	constexpr const char* kWindowTitle = "DirectX12";
 	constexpr bool kShowCursor = true;
 
 	constexpr UINT kWindowWidth = 1600;
@@ -69,7 +69,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int CmdShow)
 		wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
 		wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 		wcex.lpszMenuName = nullptr;
-		wcex.lpszClassName = L"snd";
+		wcex.lpszClassName = L"DirectX12";
 		wcex.hIconSm = LoadIcon(wcex.hInstance, reinterpret_cast<LPCWSTR>(IDI_ICON1));
 	}
 	RegisterClassEx(&wcex);
@@ -79,7 +79,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int CmdShow)
 
 	HWND hwnd = CreateWindowA
 	(
-		"snd",
+		"DirectX12",
 		kWindowTitle,
 		style,
 		0,

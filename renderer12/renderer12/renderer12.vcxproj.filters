@@ -24,13 +24,13 @@
     <ClCompile Include="library\source\frame_rate.cpp">
       <Filter>library</Filter>
     </ClCompile>
-    <ClCompile Include="library\source\graphics_core.cpp">
-      <Filter>library</Filter>
-    </ClCompile>
     <ClCompile Include="library\source\system.cpp">
       <Filter>library</Filter>
     </ClCompile>
     <ClCompile Include="library\source\pipeline_state_object.cpp">
+      <Filter>library</Filter>
+    </ClCompile>
+    <ClCompile Include="library\source\d3d12_core.cpp">
       <Filter>library</Filter>
     </ClCompile>
   </ItemGroup>
@@ -53,13 +53,13 @@
     <ClInclude Include="library\source\buffer.h">
       <Filter>library\shader</Filter>
     </ClInclude>
-    <ClInclude Include="library\source\graphics_core.h">
-      <Filter>library\shader</Filter>
-    </ClInclude>
     <ClInclude Include="library\source\system.h">
       <Filter>library\shader</Filter>
     </ClInclude>
     <ClInclude Include="library\source\pipeline_state_object.h">
+      <Filter>library\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="library\source\d3d12_core.h">
       <Filter>library\shader</Filter>
     </ClInclude>
   </ItemGroup>
