@@ -1,7 +1,7 @@
 #pragma once
-#include "math.h"
+#include "mathematics.h"
 
-namespace snd::constants
+namespace gl
 {
 	constexpr uint2 kResolution = uint2(1600, 900);
 
@@ -10,4 +10,6 @@ namespace snd::constants
 	constexpr float kAspectRatio = static_cast<float>(kResolution.x) / static_cast<float>(kResolution.y);
 
 	constexpr uint kBackBufferCount = 2;
+
+	constexpr uint kMaxControllerNum = 4;
 }
