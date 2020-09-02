@@ -15,8 +15,17 @@
     <Filter Include="source\framework">
       <UniqueIdentifier>{d9286fe2-44a5-4f99-833f-23a385e2ea4f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\entry_point">
-      <UniqueIdentifier>{e68d5314-7482-4ea3-9e02-6cb064c89738}</UniqueIdentifier>
+    <Filter Include="source\adoministrator">
+      <UniqueIdentifier>{813d8a96-2ec9-4fb5-8fb7-ee9d57545454}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\framerate">
+      <UniqueIdentifier>{bdcba62a-97a5-41b4-a342-5dc36af28b23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\input_device">
+      <UniqueIdentifier>{ceef707c-b93c-4e2d-82f7-4e57bcc60b91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\graphics_core">
+      <UniqueIdentifier>{2d01f3b2-888b-410d-b506-816621c20784}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -24,44 +33,55 @@
       <Filter>source\framework</Filter>
     </ClCompile>
     <ClCompile Include="source\entry_point.cpp">
-      <Filter>source\entry_point</Filter>
+      <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="source\framerate.cpp" />
-    <ClCompile Include="source\administrator.cpp" />
-    <ClCompile Include="source\graphics_core.cpp" />
+    <ClCompile Include="source\administrator.cpp">
+      <Filter>source\adoministrator</Filter>
+    </ClCompile>
+    <ClCompile Include="source\framerate.cpp">
+      <Filter>source\framerate</Filter>
+    </ClCompile>
+    <ClCompile Include="source\device.cpp" />
+    <ClCompile Include="source\device_context.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\framework.h">
       <Filter>source\framework</Filter>
     </ClInclude>
-    <ClInclude Include="source\keyboard.h">
-      <Filter>resource</Filter>
-    </ClInclude>
-    <ClInclude Include="source\input_device.h">
-      <Filter>resource</Filter>
+    <ClInclude Include="source\administrator.h">
+      <Filter>source\adoministrator</Filter>
     </ClInclude>
     <ClInclude Include="source\framerate.h">
-      <Filter>resource</Filter>
+      <Filter>source\framerate</Filter>
     </ClInclude>
-    <ClInclude Include="source\mathematics.h">
-      <Filter>resource</Filter>
-    </ClInclude>
-    <ClInclude Include="source\noncopyable.h">
-      <Filter>resource</Filter>
-    </ClInclude>
-    <ClInclude Include="source\mouse.h">
-      <Filter>resource</Filter>
-    </ClInclude>
-    <ClInclude Include="source\administrator.h">
-      <Filter>resource</Filter>
+    <ClInclude Include="source\input_device.h">
+      <Filter>source\input_device</Filter>
     </ClInclude>
     <ClInclude Include="source\xinput.h">
-      <Filter>resource</Filter>
+      <Filter>source\input_device</Filter>
+    </ClInclude>
+    <ClInclude Include="source\keyboard.h">
+      <Filter>source\input_device</Filter>
+    </ClInclude>
+    <ClInclude Include="source\mouse.h">
+      <Filter>source\input_device</Filter>
+    </ClInclude>
+    <ClInclude Include="source\noncopyable.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\mathematics.h">
+      <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="source\constants.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\assertion.h">
       <Filter>resource</Filter>
     </ClInclude>
-    <ClInclude Include="source\graphics_core.h">
+    <ClInclude Include="source\device.h">
+      <Filter>resource</Filter>
+    </ClInclude>
+    <ClInclude Include="source\device_context.h">
       <Filter>resource</Filter>
     </ClInclude>
   </ItemGroup>

@@ -5,12 +5,9 @@
 
 class framework : private noncopyable
 {
-private:
-	HWND hwnd_;
-
 public:
 	framework() = default;
 	~framework() = default;
 
-	int run(WNDPROC _wndproc, HINSTANCE _hinstance, int _cmdshow, UINT _width, UINT _height);
+	int run(WNDPROC _wndproc, HINSTANCE _hinstance, int _cmdshow);
 };

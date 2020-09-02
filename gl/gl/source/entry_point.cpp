@@ -90,8 +90,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int CmdShow)
 #endif
 	srand(static_cast<u_int>(time(nullptr)));
 	setlocale(LC_CTYPE, "jpn");
-	CoInitializeEx(nullptr, COINITBASE_MULTITHREADED);
 
 	framework framework;
-	return framework.run(WndProc, hInstance, CmdShow, 1280, 720);
+	return framework.run(WndProc, hInstance, CmdShow);
 }

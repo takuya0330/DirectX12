@@ -1,9 +1,8 @@
 #include "framework.h"
 #include "framerate.h"
 #include "administrator.h"
-#include "keyboard.h"
-#include "mouse.h"
-#include "xinput.h"
+#include "device.h"
+#include "device_context.h"
 
 namespace
 {
@@ -30,18 +29,7 @@ namespace
 		DWORD style = WS_OVERLAPPEDWINDOW ^ WS_MAXIMIZEBOX ^ WS_THICKFRAME | WS_VISIBLE;
 		AdjustWindowRect(&rect, style, false);
 
-		return CreateWindowA(
-			"gl",
-			kWindowTitle,
-			style,
-			CW_USEDEFAULT,
-			CW_USEDEFAULT,
-			static_cast<int>(rect.right - rect.left),
-			static_cast<int>(rect.bottom - rect.top),
-			nullptr,
-			nullptr,
-			_hinstance,
-			nullptr);
+		return CreateWindowA("gl", kWindowTitle, style, CW_USEDEFAULT, CW_USEDEFAULT, static_cast<int>(rect.right - rect.left), static_cast<int>(rect.bottom - rect.top), nullptr, nullptr, _hinstance, nullptr);
 	}
 
 	bool update()
@@ -63,21 +51,36 @@ namespace
 	}
 }
 
-int framework::run(WNDPROC _wndproc, HINSTANCE _hinstance, int _cmdshow, UINT _width, UINT _height)
+int framework::run(WNDPROC _wndproc, HINSTANCE _hinstance, int _cmdshow)
 {
-	hwnd_ = setup_window(_wndproc, _hinstance, _width, _height);
+	HWND hwnd = setup_window(_wndproc, _hinstance, gl::kWindowSize.x, gl::kWindowSize.y);
 
-	ShowWindow(hwnd_, _cmdshow);
+	ShowWindow(hwnd, _cmdshow);
 	ShowCursor(kShowCursor);
 
+	//CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+
 	gl::framerate fps(120);
-	gl::administrator admin;
+	gl::administrator admin(hwnd);
+
+	gl::device_context* render_command = gl::administrator::get<gl::device_context>();
+	constexpr float kClearColor[] = { 1.0f,0.7f,0.0f,1 };
 
 	while (update())
 	{
 		fps.run();
-		fps.show(hwnd_);
+		fps.show(hwnd);
+
+		render_command->reset();
+		render_command->barrier_transition(D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+		render_command->set_viewport(gl::kWindowSize);
+		render_command->clear(kClearColor);
+		render_command->barrier_transition(D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
+		render_command->present();
+		render_command->wait_previous_frame();
 	}
+
+	//CoUninitialize();
 
 	return 0;
 }

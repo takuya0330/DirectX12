@@ -19,17 +19,20 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\device.cpp" />
+    <ClCompile Include="source\device_context.cpp" />
     <ClCompile Include="source\entry_point.cpp" />
     <ClCompile Include="source\framerate.cpp" />
     <ClCompile Include="source\framework.cpp" />
     <ClCompile Include="source\administrator.cpp" />
-    <ClCompile Include="source\graphics_core.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\assertion.h" />
     <ClInclude Include="source\constants.h" />
+    <ClInclude Include="source\device.h" />
+    <ClInclude Include="source\device_context.h" />
     <ClInclude Include="source\framerate.h" />
     <ClInclude Include="source\framework.h" />
-    <ClInclude Include="source\graphics_core.h" />
     <ClInclude Include="source\input_device.h" />
     <ClInclude Include="source\keyboard.h" />
     <ClInclude Include="source\mathematics.h" />
@@ -137,6 +140,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -152,6 +156,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
