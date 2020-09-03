@@ -10,7 +10,8 @@ namespace gl
 
 	public:
 		keyboard() = default;
+		~keyboard() = default;
 
-		bool state(buttons _buttons, trigger _trigger) { return input_device_.state(_buttons, _trigger); }
+		bool state(buttons _buttons, trigger _trigger) { return input_device_.state((GetAsyncKeyState(static_cast<int>(_buttons)) & 0x8000), _trigger); }
 	};
 }

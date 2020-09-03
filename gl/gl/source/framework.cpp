@@ -1,13 +1,21 @@
+#include "../third_party/imgui/imgui.h"
+#include "../third_party/imgui/imgui_impl_win32.h"
+#include "../third_party/imgui/imgui_impl_dx12.h"
+
 #include "framework.h"
 #include "framerate.h"
 #include "administrator.h"
-#include "device.h"
-#include "device_context.h"
+#include "generate_device.h"
+#include "rendering_device.h"
+#include "keyboard.h"
+#include "mouse.h"
 
 namespace
 {
 	constexpr const char* kWindowTitle = "gl";
 	constexpr bool kShowCursor = true;
+	constexpr float kClearColor[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+	constexpr gl::uint kMaxFPS = 60;
 
 	HWND setup_window(WNDPROC _wndproc, HINSTANCE _hinstance, UINT _width, UINT _height)
 	{
@@ -32,7 +40,7 @@ namespace
 		return CreateWindowA("gl", kWindowTitle, style, CW_USEDEFAULT, CW_USEDEFAULT, static_cast<int>(rect.right - rect.left), static_cast<int>(rect.bottom - rect.top), nullptr, nullptr, _hinstance, nullptr);
 	}
 
-	bool update()
+	bool system_update()
 	{
 		MSG msg = {};
 		while (WM_QUIT != msg.message)
@@ -58,29 +66,89 @@ int framework::run(WNDPROC _wndproc, HINSTANCE _hinstance, int _cmdshow)
 	ShowWindow(hwnd, _cmdshow);
 	ShowCursor(kShowCursor);
 
-	//CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+	// フレームレート設定
+	gl::framerate fps(kMaxFPS);
 
-	gl::framerate fps(120);
+	// オブジェクト管理者生成
 	gl::administrator admin(hwnd);
 
-	gl::device_context* render_command = gl::administrator::get<gl::device_context>();
-	constexpr float kClearColor[] = { 1.0f,0.7f,0.0f,1 };
+	gl::generate_device* generator = gl::administrator::get<gl::generate_device>();
+	gl::rendering_device* renderer = gl::administrator::get<gl::rendering_device>();
 
-	while (update())
+	ID3D12Device* device = generator->get_device();
+	ID3D12DescriptorHeap* gui_descriptor_heap = renderer->get_gui_descriptor_heap();
+	ID3D12GraphicsCommandList* command_list = renderer->get_command_list();
+
+	// imgui設定
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; // Enable Multi-Viewport / Platform Windows
+	io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/meiryo.ttc", 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+
+	ImGui::StyleColorsDark();
+
+	ImGuiStyle& style = ImGui::GetStyle();
+	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 	{
+		style.WindowRounding = 0.0f;
+		style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+	}
+
+	ImGui_ImplWin32_Init(hwnd);
+	ImGui_ImplDX12_Init(device, gl::kFrameBufferNum, DXGI_FORMAT_R8G8B8A8_UNORM, gui_descriptor_heap, gui_descriptor_heap->GetCPUDescriptorHandleForHeapStart(), gui_descriptor_heap->GetGPUDescriptorHandleForHeapStart());
+
+	gl::keyboard* key = gl::administrator::get<gl::keyboard>();
+	gl::mouse* mouse = gl::administrator::get<gl::mouse>();
+
+	// ゲームループ
+	while (system_update())
+	{
+		ImGui_ImplDX12_NewFrame();
+		ImGui_ImplWin32_NewFrame();
+		ImGui::NewFrame();
+
 		fps.run();
 		fps.show(hwnd);
 
-		render_command->reset();
-		render_command->barrier_transition(D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
-		render_command->set_viewport(gl::kWindowSize);
-		render_command->clear(kClearColor);
-		render_command->barrier_transition(D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
-		render_command->present();
-		render_command->wait_previous_frame();
+		mouse->update();
+
+		if (ImGui::Begin("test"))
+		{
+			ImGui::Text("aaaaa"); 
+			ImGui::Text("x : %d, y : %d", mouse->get_pos().x, mouse->get_pos().y);
+			ImGui::Text("wheel : %d", mouse->get_wheel());
+		}
+		ImGui::End();
+
+		renderer->reset();
+		renderer->barrier_transition(D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+		
+		renderer->set_viewport(gl::kWindowSize);
+		renderer->screen_clear(kClearColor);
+		renderer->set_gui_descriptor_heap();
+
+		ImGui::Render();
+		ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), command_list);
+		
+		renderer->barrier_transition(D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);	
+		renderer->execute();
+
+		// Update and Render additional Platform Windows
+		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+		{
+			ImGui::UpdatePlatformWindows();
+			ImGui::RenderPlatformWindowsDefault(NULL, (void*)command_list);
+		}
+
+		renderer->present();
+		renderer->wait_previous_frame();
 	}
 
-	//CoUninitialize();
+	// imgui解放
+	ImGui_ImplDX12_Shutdown();
+	ImGui_ImplWin32_Shutdown();
+	ImGui::DestroyContext();
 
 	return 0;
 }

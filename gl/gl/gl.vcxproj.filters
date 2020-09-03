@@ -15,17 +15,23 @@
     <Filter Include="source\framework">
       <UniqueIdentifier>{d9286fe2-44a5-4f99-833f-23a385e2ea4f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\adoministrator">
-      <UniqueIdentifier>{813d8a96-2ec9-4fb5-8fb7-ee9d57545454}</UniqueIdentifier>
-    </Filter>
     <Filter Include="source\framerate">
       <UniqueIdentifier>{bdcba62a-97a5-41b4-a342-5dc36af28b23}</UniqueIdentifier>
     </Filter>
     <Filter Include="source\input_device">
       <UniqueIdentifier>{ceef707c-b93c-4e2d-82f7-4e57bcc60b91}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\graphics_core">
-      <UniqueIdentifier>{2d01f3b2-888b-410d-b506-816621c20784}</UniqueIdentifier>
+    <Filter Include="third_party">
+      <UniqueIdentifier>{219fde38-a517-4889-a1ca-5d91c0058d29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\generate_device">
+      <UniqueIdentifier>{b9bc3a13-6cda-4ce4-99be-ad7b7fc1a550}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\rendering_device">
+      <UniqueIdentifier>{4744eb2e-e499-4e8d-8bad-34dadd036a74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\administrator">
+      <UniqueIdentifier>{efa6c568-3dea-4eb5-b490-78b0496b53c2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -35,21 +41,37 @@
     <ClCompile Include="source\entry_point.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="source\administrator.cpp">
-      <Filter>source\adoministrator</Filter>
-    </ClCompile>
     <ClCompile Include="source\framerate.cpp">
       <Filter>source\framerate</Filter>
     </ClCompile>
-    <ClCompile Include="source\device.cpp" />
-    <ClCompile Include="source\device_context.cpp" />
+    <ClCompile Include="third_party\imgui\imgui.cpp">
+      <Filter>third_party</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\imgui\imgui_draw.cpp">
+      <Filter>third_party</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\imgui\imgui_impl_dx12.cpp">
+      <Filter>third_party</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\imgui\imgui_impl_win32.cpp">
+      <Filter>third_party</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\imgui\imgui_widgets.cpp">
+      <Filter>third_party</Filter>
+    </ClCompile>
+    <ClCompile Include="source\generate_device.cpp">
+      <Filter>source\generate_device</Filter>
+    </ClCompile>
+    <ClCompile Include="source\rendering_device.cpp">
+      <Filter>source\rendering_device</Filter>
+    </ClCompile>
+    <ClCompile Include="source\administrator.cpp">
+      <Filter>source\administrator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\framework.h">
       <Filter>source\framework</Filter>
-    </ClInclude>
-    <ClInclude Include="source\administrator.h">
-      <Filter>source\adoministrator</Filter>
     </ClInclude>
     <ClInclude Include="source\framerate.h">
       <Filter>source\framerate</Filter>
@@ -75,14 +97,44 @@
     <ClInclude Include="source\constants.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="source\assertion.h">
-      <Filter>resource</Filter>
+    <ClInclude Include="source\misc.h">
+      <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="source\device.h">
-      <Filter>resource</Filter>
+    <ClInclude Include="third_party\d3dx12\d3dx12.h">
+      <Filter>third_party</Filter>
     </ClInclude>
-    <ClInclude Include="source\device_context.h">
-      <Filter>resource</Filter>
+    <ClInclude Include="third_party\imgui\imconfig.h">
+      <Filter>third_party</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\imgui\imgui.h">
+      <Filter>third_party</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\imgui\imgui_impl_dx12.h">
+      <Filter>third_party</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\imgui\imgui_impl_win32.h">
+      <Filter>third_party</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\imgui\imgui_internal.h">
+      <Filter>third_party</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\imgui\imstb_rectpack.h">
+      <Filter>third_party</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\imgui\imstb_textedit.h">
+      <Filter>third_party</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\imgui\imstb_truetype.h">
+      <Filter>third_party</Filter>
+    </ClInclude>
+    <ClInclude Include="source\generate_device.h">
+      <Filter>source\generate_device</Filter>
+    </ClInclude>
+    <ClInclude Include="source\rendering_device.h">
+      <Filter>source\rendering_device</Filter>
+    </ClInclude>
+    <ClInclude Include="source\administrator.h">
+      <Filter>source\administrator</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

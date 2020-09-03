@@ -4,11 +4,6 @@
 #include "mathematics.h"
 #include "noncopyable.h"
 
-namespace gl::detail
-{
-	class input_device;
-}
-
 namespace gl
 {
 	enum class trigger : uint
@@ -41,31 +36,17 @@ namespace gl::detail
 	class input_device : private noncopyable
 	{
 	private:
-		int current_state_ = 0;
-		int previous_state_ = 0;
+		int current_state_;
+		int previous_state_;
 
 	public:
-		input_device() = default;
-
+		input_device() : current_state_(0), previous_state_(0) {}
 		~input_device() = default;
 
-		bool state(buttons _buttons, trigger _trigger)
+		bool state(bool _is_press, trigger _trigger)
 		{
 			previous_state_ = current_state_;
-			if (GetAsyncKeyState(static_cast<int>(_buttons)) & 0x8000) current_state_++;
-			else current_state_ = 0;
-
-			if (_trigger == trigger::ePress) return previous_state_ == 0 && current_state_ > 0;
-			else if (_trigger == trigger::eRelease) return previous_state_ > 0 && current_state_ == 0;
-			else return current_state_ > 0;
-
-			return false;
-		}
-
-		bool state(bool _is_xinput_button_press, trigger _trigger)
-		{
-			previous_state_ = current_state_;
-			if (_is_xinput_button_press) current_state_++;
+			if (_is_press) current_state_++;
 			else current_state_ = 0;
 
 			if (_trigger == trigger::ePress) return previous_state_ == 0 && current_state_ > 0;

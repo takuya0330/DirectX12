@@ -19,18 +19,23 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\device.cpp" />
-    <ClCompile Include="source\device_context.cpp" />
+    <ClCompile Include="source\generate_device.cpp" />
+    <ClCompile Include="source\rendering_device.cpp" />
     <ClCompile Include="source\entry_point.cpp" />
     <ClCompile Include="source\framerate.cpp" />
     <ClCompile Include="source\framework.cpp" />
     <ClCompile Include="source\administrator.cpp" />
+    <ClCompile Include="third_party\imgui\imgui.cpp" />
+    <ClCompile Include="third_party\imgui\imgui_draw.cpp" />
+    <ClCompile Include="third_party\imgui\imgui_impl_dx12.cpp" />
+    <ClCompile Include="third_party\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="third_party\imgui\imgui_widgets.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="source\assertion.h" />
+    <ClInclude Include="source\misc.h" />
     <ClInclude Include="source\constants.h" />
-    <ClInclude Include="source\device.h" />
-    <ClInclude Include="source\device_context.h" />
+    <ClInclude Include="source\generate_device.h" />
+    <ClInclude Include="source\rendering_device.h" />
     <ClInclude Include="source\framerate.h" />
     <ClInclude Include="source\framework.h" />
     <ClInclude Include="source\input_device.h" />
@@ -40,6 +45,15 @@
     <ClInclude Include="source\noncopyable.h" />
     <ClInclude Include="source\administrator.h" />
     <ClInclude Include="source\xinput.h" />
+    <ClInclude Include="third_party\d3dx12\d3dx12.h" />
+    <ClInclude Include="third_party\imgui\imconfig.h" />
+    <ClInclude Include="third_party\imgui\imgui.h" />
+    <ClInclude Include="third_party\imgui\imgui_impl_dx12.h" />
+    <ClInclude Include="third_party\imgui\imgui_impl_win32.h" />
+    <ClInclude Include="third_party\imgui\imgui_internal.h" />
+    <ClInclude Include="third_party\imgui\imstb_rectpack.h" />
+    <ClInclude Include="third_party\imgui\imstb_textedit.h" />
+    <ClInclude Include="third_party\imgui\imstb_truetype.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -139,7 +153,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>

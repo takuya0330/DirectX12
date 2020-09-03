@@ -15,6 +15,7 @@ namespace gl
 
 	public:
 		mouse() = default;
+		~mouse() = default;
 
 		void update()
 		{
@@ -31,15 +32,16 @@ namespace gl
 			scroll_ = 0;
 		}
 
-		bool state(buttons _buttons, trigger _trigger) { return input_device_.state(_buttons, _trigger); }
+		bool state(buttons _buttons, trigger _trigger) { return input_device_.state((GetAsyncKeyState(static_cast<int>(_buttons)) & 0x8000), _trigger); }
 
-		int2 get_pos()const noexcept { return position_; }
-		int2 get_drag()const noexcept { return drag_; }
-		int2 get_move()const noexcept { return move_; }
-		int get_wheel()const noexcept { return wheel_; }
+		[[nodiscard]] int2 get_pos()const noexcept { return position_; }
+		[[nodiscard]] int2 get_drag()const noexcept { return drag_; }
+		[[nodiscard]] int2 get_move()const noexcept { return move_; }
+		[[nodiscard]] int get_wheel()const noexcept { return wheel_; }
 
 		void set_pos(const int2& _position)noexcept { position_ = _position; }
 		void set_drag(const int2& _drag)noexcept { drag_ = _drag; }
+
 		void add_scroll(int _delta)noexcept { scroll_ += _delta; }
 	};
 }

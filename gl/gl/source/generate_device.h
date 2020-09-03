@@ -6,11 +6,9 @@
 #include <dxgi1_6.h>
 #include <wrl.h>
 
-#include "noncopyable.h"
-
 namespace gl
 {
-	class device : private noncopyable
+	class generate_device
 	{
 		template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 	private:
@@ -25,15 +23,21 @@ namespace gl
 		void create_debug_layer();
 		void create_info_queue();
 		void create_factory(UINT _dxgi_flags);
-		void create_d3d12device(IDXGIAdapter4* _adapter, const D3D_FEATURE_LEVEL _feature_level);
+		void create_device(IDXGIAdapter4* _adapter, const D3D_FEATURE_LEVEL _feature_level);
 		void create_command_queue(D3D12_COMMAND_LIST_TYPE _command_list_type);
 		void create_command_allocator(D3D12_COMMAND_LIST_TYPE _command_list_type);
 		void create_command_list(D3D12_COMMAND_LIST_TYPE _command_list_type);
 
 		ComPtr<IDXGIAdapter4> search_adapter(IDXGIFactory6* _factory, const D3D_FEATURE_LEVEL _feature_level);
+
 	public:
-		device();
-		~device() = default;
+		generate_device() = default;
+		~generate_device() = default;
+
+		void initialize();
+		void reset();
+		void barrier_transition(ID3D12Resource* _resource, D3D12_RESOURCE_STATES _before, D3D12_RESOURCE_STATES _affter);
+		void close();
 
 		ID3D12Device5* get_device()const { return device_.Get(); }
 		IDXGIFactory6* get_factory()const { return factory_.Get(); }

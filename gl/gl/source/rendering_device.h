@@ -9,12 +9,11 @@
 
 #include "../third_party/d3dx12/d3dx12.h"
 
-#include "noncopyable.h"
 #include "constants.h"
 
 namespace gl
 {
-	class device_context : private noncopyable
+	class rendering_device
 	{
 		template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 	private:
@@ -24,6 +23,8 @@ namespace gl
 		ComPtr<ID3D12CommandQueue> command_queue_;
 		ComPtr<ID3D12CommandAllocator> command_allocator_;
 		ComPtr<ID3D12GraphicsCommandList> command_list_;
+
+		ComPtr<ID3D12DescriptorHeap> gui_descriptor_heap_;
 
 		CD3DX12_VIEWPORT viewport_;
 		CD3DX12_RECT scissor_rect_;
@@ -48,6 +49,7 @@ namespace gl
 			HANDLE event_;
 		} sync_;
 
+	private:
 		void create_swap_chain(HWND _hwnd, IDXGIFactory6* _factory);
 		void create_command_queue(ID3D12Device* _device, D3D12_COMMAND_LIST_TYPE _command_list_type);
 		void create_command_allocator(ID3D12Device* _device, D3D12_COMMAND_LIST_TYPE _command_list_type);
@@ -55,21 +57,25 @@ namespace gl
 		void create_render_target(ID3D12Device* _device);
 		void create_depth_stencil(ID3D12Device* _device);
 		void create_fence(ID3D12Device* _device);
-	public:
-		device_context() = default;
-		~device_context() = default;
-		device_context(HWND _hwnd);
+		void create_gui_descritor_heap(ID3D12Device* _device);
 
+	public:
+		rendering_device() = default;
+		~rendering_device() = default;
+
+		void initialize(HWND _hwnd);
 		void reset();
 		void barrier_transition(D3D12_RESOURCE_STATES _before, D3D12_RESOURCE_STATES _affter);
-		void clear(const float* _clear_color);
+		void screen_clear(const float* _clear_color);
 		void set_viewport(const uint2& _window_size);
+		void execute();
 		void present(uint _sync = 0);
 		void wait_previous_frame();
+		void set_gui_descriptor_heap();
 
 		ID3D12CommandQueue* get_command_queue()const { return command_queue_.Get(); }
 		ID3D12CommandAllocator* get_command_allocator()const { return command_allocator_.Get(); }
 		ID3D12GraphicsCommandList* get_command_list()const { return command_list_.Get(); }
-
+		ID3D12DescriptorHeap* get_gui_descriptor_heap()const { return gui_descriptor_heap_.Get(); }
 	};
 }

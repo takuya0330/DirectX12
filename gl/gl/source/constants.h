@@ -10,6 +10,4 @@ namespace gl
 	constexpr float kAspectRatio = static_cast<float>(kWindowSize.x) / static_cast<float>(kWindowSize.y);
 
 	constexpr uint kFrameBufferNum = 3;
-
-	constexpr uint kMaxControllerNum = 4;
 }

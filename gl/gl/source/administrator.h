@@ -5,32 +5,49 @@
 
 namespace gl
 {
-	class device;
-	class device_context;
+	class generate_device;
+	class rendering_device;
 	class keyboard;
 	class mouse;
 	class xinput;
+
+	template<class T>
+	class component
+	{
+	private:
+		T* ptr_ = nullptr;
+	public:
+		component() { ptr_ = new T(); }
+
+		void release()
+		{
+			delete ptr_;
+			ptr_ = nullptr;
+		}
+
+		T* get() { return ptr_; }
+		T* operator->() { return ptr_; }
+	};
 
 	class administrator : private noncopyable
 	{
 	private:
 		inline static administrator* admin_ = nullptr;
 
-		device* device_;
-		device_context* device_context_;
-		keyboard* keyboard_;
-		mouse* mouse_;
-		xinput* xinput_[kMaxControllerNum];
+		component<generate_device> generate_device_;
+		component<rendering_device> rendering_device_;
+		component<keyboard> keyboard_;
+		component<mouse> mouse_;
+		component<xinput> xinput_;
 	public:
 		administrator(HWND _hwnd);
 		~administrator();
 
 		template<class T> [[nodiscard]] static T* get() { return nullptr; }
-		template<class T> [[nodiscard]] static T* get(uint _index) { return nullptr; }
-		template<> [[nodiscard]] static device* get() { return admin_->device_; }
-		template<> [[nodiscard]] static device_context* get() { return admin_->device_context_; }
-		template<> [[nodiscard]] static keyboard* get() { return admin_->keyboard_; }
-		template<> [[nodiscard]] static mouse* get() { return admin_->mouse_; }
-		template<> [[nodiscard]] static xinput* get(uint _index) { return admin_->xinput_[_index]; }
+		template<> [[nodiscard]] static generate_device* get() { return admin_->generate_device_.get(); }
+		template<> [[nodiscard]] static rendering_device* get() { return admin_->rendering_device_.get(); }
+		template<> [[nodiscard]] static keyboard* get() { return admin_->keyboard_.get(); }
+		template<> [[nodiscard]] static mouse* get() { return admin_->mouse_.get(); }
+		template<> [[nodiscard]] static xinput* get() { return admin_->xinput_.get(); }
 	};
 }

@@ -19,19 +19,15 @@ namespace gl
 
 	public:
 		framerate() = default;
-
-		~framerate() = default;
-		
+		~framerate() = default;	
 		framerate(uint _max);
 
-		void run();
-		
+		void run();	
 		void show(const HWND& _hwnd);
-		
-		void set_max_fps(uint _max) { frame_interval_ = std::chrono::duration<double>((_max == 0) ? 0.0 : 1.0 / _max); }
 
-		uint get_fps()const noexcept { return current_fps_; }
-		
+		uint get_fps()const noexcept { return current_fps_; }	
 		float get_elapsed_time()const noexcept { return static_cast<float>(delta_time_.count()); }
+
+		void set_max_fps(uint _max) { frame_interval_ = std::chrono::duration<double>((_max == 0) ? 0.0 : 1.0 / _max); }
 	};
 }

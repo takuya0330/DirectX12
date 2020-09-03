@@ -1,31 +1,34 @@
-#include "device_context.h"
+#include "rendering_device.h"
 #include "administrator.h"
-#include "device.h"
-#include "assertion.h"
+#include "generate_device.h"
+#include "misc.h"
 
 namespace gl
 {
-	device_context::device_context(HWND _hwnd)
+	void rendering_device::initialize(HWND _hwnd)
 	{
-		ID3D12Device5* d3d12device = administrator::get<device>()->get_device();
-		IDXGIFactory6* factory = administrator::get<device>()->get_factory();
+		generate_device* generator = administrator::get<generate_device>();
+		ID3D12Device5* device = generator->get_device();
+		IDXGIFactory6* factory = generator->get_factory();
 
-		create_command_queue(d3d12device, D3D12_COMMAND_LIST_TYPE_DIRECT);
+		create_command_queue(device, D3D12_COMMAND_LIST_TYPE_DIRECT);
 
-		create_command_allocator(d3d12device, D3D12_COMMAND_LIST_TYPE_DIRECT);
+		create_command_allocator(device, D3D12_COMMAND_LIST_TYPE_DIRECT);
 
-		create_command_list(d3d12device, D3D12_COMMAND_LIST_TYPE_DIRECT);
+		create_command_list(device, D3D12_COMMAND_LIST_TYPE_DIRECT);
 
 		create_swap_chain(_hwnd, factory);
 
-		create_render_target(d3d12device);
+		create_render_target(device);
 
-		create_depth_stencil(d3d12device);
+		create_depth_stencil(device);
 
-		create_fence(d3d12device);
+		create_fence(device);
+
+		create_gui_descritor_heap(device);
 	}
 
-	void device_context::reset()
+	void rendering_device::reset()
 	{
 		frame_buffer_index_ = swap_chain_->GetCurrentBackBufferIndex();
 
@@ -33,13 +36,13 @@ namespace gl
 		command_list_->Reset(command_allocator_.Get(), nullptr);
 	}
 
-	void device_context::barrier_transition(D3D12_RESOURCE_STATES _before, D3D12_RESOURCE_STATES _affter)
+	void rendering_device::barrier_transition(D3D12_RESOURCE_STATES _before, D3D12_RESOURCE_STATES _affter)
 	{
 		D3D12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(render_target_.buffers_[frame_buffer_index_].Get(), _before, _affter);
 		command_list_->ResourceBarrier(1, &barrier);
 	}
 
-	void device_context::clear(const float* _clear_color)
+	void rendering_device::screen_clear(const float* _clear_color)
 	{
 		CD3DX12_CPU_DESCRIPTOR_HANDLE render_target_view(render_target_.descriptor_heap_->GetCPUDescriptorHandleForHeapStart(), frame_buffer_index_, render_target_.increment_size_);
 		CD3DX12_CPU_DESCRIPTOR_HANDLE depth_stencil_view(depth_stencil_.descriptor_heap_->GetCPUDescriptorHandleForHeapStart());
@@ -48,7 +51,7 @@ namespace gl
 		command_list_->ClearDepthStencilView(depth_stencil_view, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 	}
 
-	void device_context::set_viewport(const uint2& _window_size)
+	void rendering_device::set_viewport(const uint2& _window_size)
 	{
 		viewport_ = CD3DX12_VIEWPORT(0.0f, 0.0f, static_cast<float>(_window_size.x), static_cast<float>(_window_size.y));
 		scissor_rect_ = CD3DX12_RECT(0, 0, static_cast<LONG>(_window_size.x), static_cast<LONG>(_window_size.y));
@@ -56,17 +59,20 @@ namespace gl
 		command_list_->RSSetScissorRects(1, &scissor_rect_);
 	}
 
-	void device_context::present(uint _sync)
+	void rendering_device::execute()
 	{
 		command_list_->Close();
 
 		ID3D12CommandList* list = command_list_.Get();
 		command_queue_->ExecuteCommandLists(1, &list);
+	}
 
+	void rendering_device::present(uint _sync)
+	{
 		swap_chain_->Present(_sync, 0);
 	}
 
-	void device_context::wait_previous_frame()
+	void rendering_device::wait_previous_frame()
 	{
 		command_queue_->Signal(sync_.fence_.Get(), ++sync_.value_);
 		if (sync_.fence_->GetCompletedValue() != sync_.value_)
@@ -76,7 +82,12 @@ namespace gl
 		}
 	}
 
-	void device_context::create_swap_chain(HWND _hwnd, IDXGIFactory6* _factory)
+	void rendering_device::set_gui_descriptor_heap()
+	{
+		command_list_->SetDescriptorHeaps(1, gui_descriptor_heap_.GetAddressOf());
+	}
+
+	void rendering_device::create_swap_chain(HWND _hwnd, IDXGIFactory6* _factory)
 	{
 		DXGI_SWAP_CHAIN_DESC1 desc = {};
 		desc.Width = kWindowSize.x;
@@ -98,7 +109,7 @@ namespace gl
 		swap_chain1.As(&swap_chain_);
 	}
 
-	void device_context::create_command_queue(ID3D12Device* _device, D3D12_COMMAND_LIST_TYPE _command_list_type)
+	void rendering_device::create_command_queue(ID3D12Device* _device, D3D12_COMMAND_LIST_TYPE _command_list_type)
 	{
 		D3D12_COMMAND_QUEUE_DESC desc = {};
 		desc.Type = _command_list_type;
@@ -109,18 +120,18 @@ namespace gl
 		_ASSERT_EXPR_A(SUCCEEDED(_device->CreateCommandQueue(&desc, IID_PPV_ARGS(&command_queue_))), "CreateCommandQueue is failed.");
 	}
 
-	void device_context::create_command_allocator(ID3D12Device* _device, D3D12_COMMAND_LIST_TYPE _command_list_type)
+	void rendering_device::create_command_allocator(ID3D12Device* _device, D3D12_COMMAND_LIST_TYPE _command_list_type)
 	{
 		_ASSERT_EXPR_A(SUCCEEDED(_device->CreateCommandAllocator(_command_list_type, IID_PPV_ARGS(&command_allocator_))), "CreateCommandAllocator is failed.");
 	}
 
-	void device_context::create_command_list(ID3D12Device* _device, D3D12_COMMAND_LIST_TYPE _command_list_type)
+	void rendering_device::create_command_list(ID3D12Device* _device, D3D12_COMMAND_LIST_TYPE _command_list_type)
 	{
 		_ASSERT_EXPR_A(SUCCEEDED(_device->CreateCommandList(0, _command_list_type, command_allocator_.Get(), nullptr, IID_PPV_ARGS(&command_list_))), "CreateCommandList is failed.");
 		command_list_->Close();
 	}
 
-	void device_context::create_render_target(ID3D12Device* _device)
+	void rendering_device::create_render_target(ID3D12Device* _device)
 	{
 		D3D12_DESCRIPTOR_HEAP_DESC descriptor_heap_desc = {};
 		descriptor_heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
@@ -135,7 +146,7 @@ namespace gl
 		CD3DX12_CPU_DESCRIPTOR_HANDLE cpu_handle(render_target_.descriptor_heap_->GetCPUDescriptorHandleForHeapStart());
 
 		D3D12_RENDER_TARGET_VIEW_DESC render_target_view_desc = {};
-		render_target_view_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+		render_target_view_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 		render_target_view_desc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 
 		for (uint i = 0; i < kFrameBufferNum; ++i)
@@ -146,7 +157,7 @@ namespace gl
 		}
 	}
 
-	void device_context::create_depth_stencil(ID3D12Device* _device)
+	void rendering_device::create_depth_stencil(ID3D12Device* _device)
 	{
 		D3D12_DESCRIPTOR_HEAP_DESC descriptor_heap_desc = {};
 		descriptor_heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
@@ -188,10 +199,21 @@ namespace gl
 		_device->CreateDepthStencilView(depth_stencil_.buffer_.Get(), &depth_stencil_view_desc, cpu_handle);
 	}
 
-	void device_context::create_fence(ID3D12Device* _device)
+	void rendering_device::create_fence(ID3D12Device* _device)
 	{
 		_ASSERT_EXPR_A(SUCCEEDED(_device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&sync_.fence_))), "CreateFence is failed.");
 		sync_.event_ = CreateEvent(nullptr, false, false, nullptr);
 		sync_.value_ = 0;
+	}
+
+	void rendering_device::create_gui_descritor_heap(ID3D12Device* _device)
+	{
+		D3D12_DESCRIPTOR_HEAP_DESC descriptor_heap_desc = {};
+		descriptor_heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+		descriptor_heap_desc.NumDescriptors = 1;
+		descriptor_heap_desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+		descriptor_heap_desc.NodeMask = 0;
+
+		_ASSERT_EXPR_A(SUCCEEDED(_device->CreateDescriptorHeap(&descriptor_heap_desc, IID_PPV_ARGS(&gui_descriptor_heap_))), "CreateDescriptorHeap is failed.");
 	}
 }

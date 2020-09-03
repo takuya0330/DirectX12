@@ -3,12 +3,21 @@
 #include <time.h>
 #include <locale>
 
+#include "../third_party/imgui/imgui.h"
+#include "../third_party/imgui/imgui_impl_win32.h"
+#include "../third_party/imgui/imgui_impl_dx12.h"
+
 #include "framework.h"
 #include "administrator.h"
 #include "mouse.h"
 
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 LRESULT CALLBACK WndProc(HWND _hwnd, UINT _msg, WPARAM _wparam, LPARAM _lparam)
 {
+	if (ImGui_ImplWin32_WndProcHandler(_hwnd, _msg, _wparam, _lparam))
+		return true;
+
 	static POINTS m;
 
 	switch (_msg)
@@ -74,8 +83,7 @@ LRESULT CALLBACK WndProc(HWND _hwnd, UINT _msg, WPARAM _wparam, LPARAM _lparam)
 	break;
 	case WM_MOUSEWHEEL:
 	{
-		gl::mouse* mouse = gl::administrator::get<gl::mouse>();
-		mouse->add_scroll(GET_WHEEL_DELTA_WPARAM(_wparam) / WHEEL_DELTA);
+		gl::administrator::get<gl::mouse>()->add_scroll(GET_WHEEL_DELTA_WPARAM(_wparam) / WHEEL_DELTA);
 	}
 	break;
 	default: return DefWindowProc(_hwnd, _msg, _wparam, _lparam);

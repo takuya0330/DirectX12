@@ -288,17 +288,17 @@ namespace gl::math
 	static constexpr float PI = 3.14159265359f;
 
 	template<class T>
-	inline constexpr T abs(T _value) { return (_value < static_cast<T>(0)) ? -_value : _value; }
+	[[nodiscard]] inline constexpr T abs(T _value) { return (_value < static_cast<T>(0)) ? -_value : _value; }
 
 	template<class T>
-	inline constexpr T radian(T _degree) { return _degree * (PI / 180.0f); }
+	[[nodiscard]] inline constexpr T radian(T _degree) { return _degree * (PI / 180.0f); }
 
 	template<class T>
-	inline constexpr T degree(T _radian) { return _radian * (180.0f / PI); }
+	[[nodiscard]] inline constexpr T degree(T _radian) { return _radian * (180.0f / PI); }
 
 	template<class T>
-	inline constexpr T lerp(T _a, T _b, T _f) { return _a + _f * (_b - _a); }
+	[[nodiscard]] inline constexpr T lerp(T _a, T _b, T _f) { return _a + _f * (_b - _a); }
 
 	template<class T>
-	inline constexpr T clamp(T _v, T _low, T _high) { return (_low <= _v && _v <= _high) ? _v : (_v < _low) ? _low : _high; }
+	[[nodiscard]] inline constexpr T clamp(T _v, T _low, T _high) { return (_low <= _v && _v <= _high) ? _v : (_v < _low) ? _low : _high; }
 }
