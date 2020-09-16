@@ -152,6 +152,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\Administrator.cpp" />
+    <ClCompile Include="Source\Core\Device.cpp" />
+    <ClCompile Include="Source\Core\DeviceContext.cpp" />
     <ClCompile Include="Source\Input\Keyboard.cpp" />
     <ClCompile Include="Source\Input\Mouse.cpp" />
     <ClCompile Include="Source\Input\XInput.cpp" />
@@ -189,6 +191,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Administrator.h" />
+    <ClInclude Include="Source\Core\Device.h" />
+    <ClInclude Include="Source\Core\DeviceContext.h" />
     <ClInclude Include="Source\Input\Keyboard.h" />
     <ClInclude Include="Source\Input\Mouse.h" />
     <ClInclude Include="Source\Input\XInput.h" />

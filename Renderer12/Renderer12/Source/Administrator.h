@@ -6,8 +6,8 @@ namespace gl
 	class Keyboard;
 	class Mouse;
 	class XInput;
-	//class Device;
-	//class DeviceContext;
+	class Device;
+	class DeviceContext;
 	//class ShaderCompiler;
 }
 
@@ -33,8 +33,8 @@ private:
 	Component<gl::Keyboard> mKeyboard;
 	Component<gl::Mouse> mMouse;
 	Component<gl::XInput> mXInput;
-	//Component<gl::Device> mDevice;
-	//Component<gl::DeviceContext> mDeviceContext;
+	Component<gl::Device> mDevice;
+	Component<gl::DeviceContext> mDeviceContext;
 	//Component<gl::ShaderCompiler> mShaderCompiler;
 public:
 	Administrator();
@@ -47,7 +47,7 @@ public:
 	template<> [[nodiscard]] static gl::Keyboard* Get() { return mAdmin->mKeyboard.Get(); }
 	template<> [[nodiscard]] static gl::Mouse* Get() { return mAdmin->mMouse.Get(); }
 	template<> [[nodiscard]] static gl::XInput* Get() { return mAdmin->mXInput.Get(); }
-	//template<> [[nodiscard]] static gl::Device* Get() { return mAdmin->mDevice.Get(); }
-	//template<> [[nodiscard]] static gl::DeviceContext* Get() { return mAdmin->mDeviceContext.Get(); }
+	template<> [[nodiscard]] static gl::Device* Get() { return mAdmin->mDevice.Get(); }
+	template<> [[nodiscard]] static gl::DeviceContext* Get() { return mAdmin->mDeviceContext.Get(); }
 	//template<> [[nodiscard]] static gl::ShaderCompiler* Get() { return mAdmin->mShaderCompiler.Get(); }
 };

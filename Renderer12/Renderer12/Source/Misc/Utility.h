@@ -9,29 +9,32 @@
 #define _ASSERTION(expr, expr_str) ((void)0)
 #endif
 
-inline LPWSTR hResultTrace(HRESULT hr)
+namespace gl
 {
-	LPWSTR msg;
-	FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), reinterpret_cast<LPWSTR>(&msg), 0, NULL);
-	return msg;
-}
+	inline LPWSTR hResultTrace(HRESULT hr)
+	{
+		LPWSTR msg;
+		FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), reinterpret_cast<LPWSTR>(&msg), 0, NULL);
+		return msg;
+	}
 
 #if _DEBUG
-inline void Console(const char* _format, ...)
-{
-	char str[1024];
-	sprintf_s(str, _format);
-	OutputDebugStringA(str);
-	OutputDebugStringA("\n");
-}
-inline void Console(const wchar_t* _format, ...)
-{
-	wchar_t str[1024];
-	swprintf_s(str, _format);
-	OutputDebugStringW(str);
-	OutputDebugStringW(L"\n");
-}
+	inline void Console(const char* _format, ...)
+	{
+		char str[1024];
+		sprintf_s(str, _format);
+		OutputDebugStringA(str);
+		OutputDebugStringA("\n");
+	}
+	inline void Console(const wchar_t* _format, ...)
+	{
+		wchar_t str[1024];
+		swprintf_s(str, _format);
+		OutputDebugStringW(str);
+		OutputDebugStringW(L"\n");
+	}
 #else
-inline void Console(const char* _format, ...) {}
-inline void Console(const wchar_t* _format, ...) {}
+	inline void Console(const char* _format, ...) {}
+	inline void Console(const wchar_t* _format, ...) {}
 #endif
+}

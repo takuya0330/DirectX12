@@ -3,7 +3,7 @@
 
 #include "../Mathematics.h"
 
-enum class ScreenResolution : uint
+enum class Resolution : uint
 {
 	e720p,
 	e900p,
@@ -18,11 +18,10 @@ namespace gl
 	{
 		static constexpr const char* kTitle = "Graphics Library";
 		static constexpr bool kShowCursor = true;
-		static constexpr uint2 kResolution[static_cast<uint>(ScreenResolution::eMax)] = { uint2(1280,720), uint2(1600,900), uint2(1920,1080) };
+		static constexpr uint2 kResolution[static_cast<uint>(Resolution::eMax)] = { uint2(1280,720), uint2(1600,900), uint2(1920,1080) };
 	private:
 		HWND mHwnd;
-		uint mWidth;
-		uint mHeight;
+		Resolution mResolutionType = Resolution::e720p;
 	public:
 		Window() = default;
 		~Window() = default;
@@ -32,7 +31,6 @@ namespace gl
 		void Show(int _CmdShow);
 	public:
 		HWND GetHwnd()noexcept { return mHwnd; }
-		uint GetWidth()const noexcept { return mWidth; }
-		uint GetHeight()const noexcept { return mHeight; }
+		uint2 GetResolution()const noexcept { return kResolution[static_cast<uint>(mResolutionType)]; }
 	};
 }

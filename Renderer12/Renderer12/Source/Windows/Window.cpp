@@ -4,9 +4,10 @@ namespace gl
 {
 	void Window::Initialize()
 	{
-		mWidth = kResolution[static_cast<uint>(ScreenResolution::e720p)].x;
-		mHeight = kResolution[static_cast<uint>(ScreenResolution::e720p)].y;
-		RECT lRect = { 0, 0, static_cast<LONG>(mWidth), static_cast<LONG>(mHeight) };
+		mResolutionType = Resolution::e720p;
+		LONG lWidth = static_cast<LONG>(kResolution[static_cast<uint>(mResolutionType)].x);
+		LONG lHeight = static_cast<LONG>(kResolution[static_cast<uint>(mResolutionType)].y);
+		RECT lRect = { 0, 0, lWidth, lHeight };
 		DWORD lStyle = WS_OVERLAPPEDWINDOW ^ WS_MAXIMIZEBOX ^ WS_THICKFRAME | WS_VISIBLE;
 		AdjustWindowRect(&lRect, lStyle, false);
 

@@ -3,15 +3,15 @@
 #include "../Administrator.h"
 #include "../Input/Mouse.h"
 
-//#include "../ThirdParty/imgui/imgui.h"
-//#include "../ThirdParty/imgui/imgui_impl_win32.h"
-//#include "../ThirdParty/imgui/imgui_impl_dx12.h"
+#include "../../ThirdParty/imgui/imgui.h"
+#include "../../ThirdParty/imgui/imgui_impl_win32.h"
+#include "../../ThirdParty/imgui/imgui_impl_dx12.h"
 
-//extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 LRESULT CALLBACK MsgProc(HWND _hWnd, UINT _Msg, WPARAM _wParam, LPARAM _lParam)
 {
-	//if (ImGui_ImplWin32_WndProcHandler(_hWnd, _Msg, _wParam, _lParam)) return true;
+	if (ImGui_ImplWin32_WndProcHandler(_hWnd, _Msg, _wParam, _lParam)) return true;
 
 	PAINTSTRUCT lPaintStruct;
 	HDC lHdc;

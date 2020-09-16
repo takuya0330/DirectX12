@@ -6,8 +6,8 @@
 #include "Input/Keyboard.h"
 #include "Input/Mouse.h"
 #include "Input/XInput.h"
-//#include "D3D12/Device.h"
-//#include "DeviceContext.h"
+#include "Core/Device.h"
+#include "Core/DeviceContext.h"
 //#include "ShaderCompiler.h"
 
 Administrator::Administrator()
@@ -19,8 +19,8 @@ Administrator::Administrator()
 	mKeyboard->Initialize();
 	mMouse->Initialize();
 	mXInput->Initialize();
-	//mDevice->Initialize();
-	//mDeviceContext->Initialize();
+	mDevice->Initialize();
+	mDeviceContext->Initialize();
 	//mShaderCompiler->Initialize();
 }
 
@@ -30,8 +30,8 @@ Administrator::~Administrator()
 	mKeyboard.Release();
 	mMouse.Release();
 	mXInput.Release();
-	//mDevice.Release();
-	//mDeviceContext.Release();
+	mDevice.Release();
+	mDeviceContext.Release();
 	//mShaderCompiler.Release();
 
 	mAdmin = nullptr;
