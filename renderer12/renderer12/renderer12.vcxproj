@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{1f1d180c-8d9e-4378-aea2-89dc4955fbee}</ProjectGuid>
+    <RootNamespace>renderer12</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>third_party/DirectXTex;third_party/DirectXTex/Debug;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>DirectXTex.lib;Shlwapi.lib;d3d12.lib;dxgi.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>third_party/DirectXTex;third_party/DirectXTex/Release;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>DirectXTex.lib;Shlwapi.lib;d3d12.lib;dxgi.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="source\administrator\administrator.cpp" />
+    <ClCompile Include="source\device\device.cpp" />
+    <ClCompile Include="source\device_context\device_context.cpp" />
+    <ClCompile Include="source\geometry2d\geometry2d.cpp" />
+    <ClCompile Include="source\keyboard\keyboard.cpp" />
+    <ClCompile Include="source\mouse\mouse.cpp" />
+    <ClCompile Include="source\shader_compiler\shader_compiler.cpp" />
+    <ClCompile Include="source\utility\frame_limiter.cpp" />
+    <ClCompile Include="source\windows_api\entry_point.cpp" />
+    <ClCompile Include="source\main.cpp" />
+    <ClCompile Include="source\windows_api\msg_proc.cpp" />
+    <ClCompile Include="source\window\window.cpp" />
+    <ClCompile Include="third_party\DirectXTex\BC.cpp" />
+    <ClCompile Include="third_party\DirectXTex\BC4BC5.cpp" />
+    <ClCompile Include="third_party\DirectXTex\BC6HBC7.cpp" />
+    <ClCompile Include="third_party\DirectXTex\BCDirectCompute.cpp" />
+    <ClCompile Include="third_party\DirectXTex\DirectXTexCompress.cpp" />
+    <ClCompile Include="third_party\DirectXTex\DirectXTexCompressGPU.cpp" />
+    <ClCompile Include="third_party\DirectXTex\DirectXTexConvert.cpp" />
+    <ClCompile Include="third_party\DirectXTex\DirectXTexD3D11.cpp" />
+    <ClCompile Include="third_party\DirectXTex\DirectXTexD3D12.cpp" />
+    <ClCompile Include="third_party\DirectXTex\DirectXTexDDS.cpp" />
+    <ClCompile Include="third_party\DirectXTex\DirectXTexFlipRotate.cpp" />
+    <ClCompile Include="third_party\DirectXTex\DirectXTexHDR.cpp" />
+    <ClCompile Include="third_party\DirectXTex\DirectXTexImage.cpp" />
+    <ClCompile Include="third_party\DirectXTex\DirectXTexMipmaps.cpp" />
+    <ClCompile Include="third_party\DirectXTex\DirectXTexMisc.cpp" />
+    <ClCompile Include="third_party\DirectXTex\DirectXTexNormalMaps.cpp" />
+    <ClCompile Include="third_party\DirectXTex\DirectXTexPMAlpha.cpp" />
+    <ClCompile Include="third_party\DirectXTex\DirectXTexResize.cpp" />
+    <ClCompile Include="third_party\DirectXTex\DirectXTexTGA.cpp" />
+    <ClCompile Include="third_party\DirectXTex\DirectXTexUtil.cpp" />
+    <ClCompile Include="third_party\DirectXTex\DirectXTexWIC.cpp" />
+    <ClCompile Include="third_party\imgui\imgui.cpp" />
+    <ClCompile Include="third_party\imgui\imgui_draw.cpp" />
+    <ClCompile Include="third_party\imgui\imgui_impl_dx12.cpp" />
+    <ClCompile Include="third_party\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="third_party\imgui\imgui_widgets.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\administrator\administrator.hpp" />
+    <ClInclude Include="source\device\device.hpp" />
+    <ClInclude Include="source\device_context\device_context.hpp" />
+    <ClInclude Include="source\geometry2d\geometry2d.hpp" />
+    <ClInclude Include="source\keyboard\keyboard.hpp" />
+    <ClInclude Include="source\math\mathmatics.hpp" />
+    <ClInclude Include="source\mouse\mouse.hpp" />
+    <ClInclude Include="source\shader_compiler\shader_compiler.hpp" />
+    <ClInclude Include="source\utility\benchmark.hpp" />
+    <ClInclude Include="source\utility\frame_limiter.hpp" />
+    <ClInclude Include="source\utility\input_state.hpp" />
+    <ClInclude Include="source\utility\utility.h" />
+    <ClInclude Include="source\window\window.hpp" />
+    <ClInclude Include="third_party\d3dx12\d3dx12.h" />
+    <ClInclude Include="third_party\DirectXTex\BC.h" />
+    <ClInclude Include="third_party\DirectXTex\BCDirectCompute.h" />
+    <ClInclude Include="third_party\DirectXTex\d3dx12.h" />
+    <ClInclude Include="third_party\DirectXTex\DDS.h" />
+    <ClInclude Include="third_party\DirectXTex\DirectXTex.h" />
+    <ClInclude Include="third_party\DirectXTex\DirectXTexP.h" />
+    <ClInclude Include="third_party\DirectXTex\filters.h" />
+    <ClInclude Include="third_party\DirectXTex\scoped.h" />
+    <ClInclude Include="third_party\dxc\dxcapi.h" />
+    <ClInclude Include="third_party\dxc\dxcapi.use.h" />
+    <ClInclude Include="third_party\imgui\imconfig.h" />
+    <ClInclude Include="third_party\imgui\imgui.h" />
+    <ClInclude Include="third_party\imgui\imgui_impl_dx12.h" />
+    <ClInclude Include="third_party\imgui\imgui_impl_win32.h" />
+    <ClInclude Include="third_party\imgui\imgui_internal.h" />
+    <ClInclude Include="third_party\imgui\imstb_rectpack.h" />
+    <ClInclude Include="third_party\imgui\imstb_textedit.h" />
+    <ClInclude Include="third_party\imgui\imstb_truetype.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="third_party\DirectXTex\DirectXTex.inl" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
