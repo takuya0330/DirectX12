@@ -1,11 +1,23 @@
+#pragma once
+#include <Windows.h>
+#include <chrono>
 #include <thread>
 #include <sstream>
 
-#include "frame_limiter.hpp"
-
-namespace re12::detail
+class FrameLimiter
 {
-	FrameLimiter::FrameLimiter(UINT _MaxFPS)
+private:
+	std::chrono::high_resolution_clock::time_point mLastTime;
+	std::chrono::duration<double>	mDeltaTime;
+	std::chrono::duration<double>	mFrameInterval;
+	std::chrono::duration<double>	mTimeStamp;
+	std::chrono::duration<double>	mTimeElapsed;
+	UINT mFrames;
+	UINT mCurrentFPS;
+public:
+	FrameLimiter() = default;
+	~FrameLimiter() = default;
+	FrameLimiter(UINT _MaxFPS)
 	{
 		mLastTime = std::chrono::high_resolution_clock::now();
 		mDeltaTime = std::chrono::duration<double>(0.0);
@@ -15,8 +27,8 @@ namespace re12::detail
 		mFrames = 0;
 		mCurrentFPS = 0;
 	}
-
-	void FrameLimiter::Update()
+public:
+	void Update()
 	{
 		++mFrames;
 
@@ -48,12 +60,16 @@ namespace re12::detail
 			mTimeStamp = std::chrono::duration<double>(0.0);
 		}
 	}
-
-	void FrameLimiter::Show(const HWND& _Hwnd)
+	void Show(const HWND& _Hwnd)
 	{
 		std::ostringstream outs;
 		outs.precision(4);
 		outs << "FPS : " << mCurrentFPS << " / " << "Frame Time : " << mDeltaTime.count() << " (ms)";
 		SetWindowTextA(_Hwnd, outs.str().c_str());
 	}
-}
+public:
+	UINT GetFPS()const noexcept { return mCurrentFPS; }
+	float GetElapsedTime()const noexcept { return static_cast<float>(mDeltaTime.count()); }
+public:
+	void SetMaxFPS(UINT _MaxFPS) { mFrameInterval = std::chrono::duration<double>((_MaxFPS == 0) ? 0.0 : 1.0 / _MaxFPS); }
+};

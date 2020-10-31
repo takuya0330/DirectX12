@@ -3,8 +3,8 @@
 #include <time.h>
 #include <locale>
 
-#include "../administrator/administrator.hpp"
-#include "../window/window.hpp"
+#include "../../system.h"
+#include "window.h"
 
 LRESULT CALLBACK MsgProc(HWND _hWnd, UINT _Msg, WPARAM _wParam, LPARAM _lParam);
 
@@ -36,11 +36,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int CmdShow)
 		RegisterClassEx(&lWCEX);
 	}
 
-	// オブジェクト管理者作成
-	re12::Administrator lAdministrator;
-	lAdministrator.Get<re12::detail::Window>()->Show(CmdShow);
+	System lSystem;
+	lSystem.Get<detail::Window>()->Show(CmdShow);
 
-	// メイン関数
 	Main();
 
 	return 0;

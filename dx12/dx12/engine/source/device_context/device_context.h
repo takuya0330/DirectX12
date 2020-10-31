@@ -5,7 +5,7 @@
 #include <array>
 #include <functional>
 
-namespace re12::detail
+namespace detail
 {
 	class DeviceContext
 	{

@@ -1,7 +1,8 @@
-#include "device_context.hpp"
-#include "../administrator/administrator.hpp"
-#include "../window/window.hpp"
-#include "../device/device.hpp"
+#include "device_context.h"
+
+#include "../../system.h"
+#include "../windows/window.h"
+#include "../device/device.h"
 #include "../utility/utility.h"
 
 #include "../../third_party/d3dx12/d3dx12.h"
@@ -9,7 +10,7 @@
 #include "../../third_party/imgui/imgui_impl_win32.h"
 #include "../../third_party/imgui/imgui_impl_dx12.h"
 
-namespace re12::detail
+namespace detail
 {
 	DeviceContext::~DeviceContext()
 	{
@@ -23,9 +24,10 @@ namespace re12::detail
 	void DeviceContext::Initialize()
 	{
 		HRESULT hr = S_OK;
-		Window* lWindow = Administrator::Get<Window>();
-		Device* lDevice = Administrator::Get<Device>();
-		ID3D12Device5* lD3D12Device = Administrator::Get<Device>()->GetDevice5();
+		detail::Window* lWindow = System::Get<detail::Window>();
+		uint2 lWindowSize = lWindow->GetSize();
+		detail::Device* lDevice = System::Get<detail::Device>();
+		ID3D12Device5* lD3D12Device = lDevice->GetDevice5();
 
 		constexpr D3D12_COMMAND_QUEUE_DESC lCommandQueueDesc{
 			.Type = D3D12_COMMAND_LIST_TYPE_DIRECT,
@@ -34,18 +36,18 @@ namespace re12::detail
 			.NodeMask = 0
 		};
 		hr = lD3D12Device->CreateCommandQueue(&lCommandQueueDesc, IID_PPV_ARGS(mCommandQueue.GetAddressOf()));
-		RE12_ASSERT_ERROR(SUCCEEDED(hr), "ID3D12Device5::CreateCommandQueue is failed.");
+		_ERROR_TRACE(SUCCEEDED(hr), "ID3D12Device5::CreateCommandQueue is failed.");
 
 		hr = lD3D12Device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(mCommandAllocator.GetAddressOf()));
-		RE12_ASSERT_ERROR(SUCCEEDED(hr), "ID3D12Device5::CreateCommandAllocator is failed.");
+		_ERROR_TRACE(SUCCEEDED(hr), "ID3D12Device5::CreateCommandAllocator is failed.");
 
 		hr = lD3D12Device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, mCommandAllocator.Get(), nullptr, IID_PPV_ARGS(mCommandList.GetAddressOf()));
-		RE12_ASSERT_ERROR(SUCCEEDED(hr), "ID3D12Device5::CreateCommandList is failed.");
+		_ERROR_TRACE(SUCCEEDED(hr), "ID3D12Device5::CreateCommandList is failed.");
 		mCommandList->Close();
 
 		DXGI_SWAP_CHAIN_DESC1 lSwapChainDesc{
-			.Width = lWindow->mSize.mWidth,
-			.Height = lWindow->mSize.mHeight,
+			.Width = lWindowSize.x,
+			.Height = lWindowSize.y,
 			.Format = DXGI_FORMAT_R8G8B8A8_UNORM,
 			.Stereo = false,
 			.SampleDesc = {.Count = 1, .Quality = 0 },
@@ -58,7 +60,7 @@ namespace re12::detail
 		};
 		ComPtr<IDXGISwapChain1> lSwapChain1;
 		hr = lDevice->GetFactory6()->CreateSwapChainForHwnd(mCommandQueue.Get(), lWindow->GetHwnd(), &lSwapChainDesc, nullptr, nullptr, lSwapChain1.GetAddressOf());
-		RE12_ASSERT_ERROR(SUCCEEDED(hr), "IDXGIFactory6::CreateSwapChainForHwnd is failed.");
+		_ERROR_TRACE(SUCCEEDED(hr), "IDXGIFactory6::CreateSwapChainForHwnd is failed.");
 		lSwapChain1.As(&mSwapChain4);
 
 		constexpr D3D12_DESCRIPTOR_HEAP_DESC lBackBufferHeapDesc{
@@ -68,7 +70,7 @@ namespace re12::detail
 			.NodeMask = 0
 		};
 		hr = lD3D12Device->CreateDescriptorHeap(&lBackBufferHeapDesc, IID_PPV_ARGS(mBackBufferHeap.GetAddressOf()));
-		RE12_ASSERT_ERROR(SUCCEEDED(hr), "ID3D12Device5::CreateDescriptorHeap is failed.");
+		_ERROR_TRACE(SUCCEEDED(hr), "ID3D12Device5::CreateDescriptorHeap is failed.");
 		mBackBufferHeap->SetName(L"BackBuffer");
 		mBackBufferHeapSize = lD3D12Device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 		CD3DX12_CPU_DESCRIPTOR_HANDLE lBackBufferHandle(mBackBufferHeap->GetCPUDescriptorHandleForHeapStart());
@@ -79,7 +81,7 @@ namespace re12::detail
 		for (UINT i = 0; i < kBackBufferNum; ++i)
 		{
 			hr = mSwapChain4->GetBuffer(i, IID_PPV_ARGS(mBackBuffers[i].GetAddressOf()));
-			RE12_ASSERT_ERROR(SUCCEEDED(hr), "IDXGISwapChain4::GetBuffer is failed.");
+			_ERROR_TRACE(SUCCEEDED(hr), "IDXGISwapChain4::GetBuffer is failed.");
 			mBackBuffers[i]->SetName(L"BackBuffer");
 			lD3D12Device->CreateRenderTargetView(mBackBuffers[i].Get(), &lRTVDesc, lBackBufferHandle);
 			lBackBufferHandle.Offset(mBackBufferHeapSize);
@@ -92,12 +94,12 @@ namespace re12::detail
 			.NodeMask = 0
 		};
 		hr = lD3D12Device->CreateDescriptorHeap(&lDepthStencilHeapDesc, IID_PPV_ARGS(mDepthStencilHeap.GetAddressOf()));
-		RE12_ASSERT_ERROR(SUCCEEDED(hr), "ID3D12Device5::CreateDescriptorHeap is failed.");
+		_ERROR_TRACE(SUCCEEDED(hr), "ID3D12Device5::CreateDescriptorHeap is failed.");
 		CD3DX12_CPU_DESCRIPTOR_HANDLE lDepthStencilHandle(mDepthStencilHeap->GetCPUDescriptorHandleForHeapStart());
 		D3D12_RESOURCE_DESC lResourceDesc{
 			.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D,
-			.Width = lWindow->mSize.mWidth,
-			.Height = lWindow->mSize.mHeight,
+			.Width = lWindowSize.x,
+			.Height = lWindowSize.y,
 			.DepthOrArraySize = 1,
 			.Format = DXGI_FORMAT_D32_FLOAT,
 			.SampleDesc = {.Count = 1, .Quality = 0 },
@@ -113,7 +115,7 @@ namespace re12::detail
 			.DepthStencil = {.Depth = 1.0f, .Stencil = 0}
 		};
 		hr = lD3D12Device->CreateCommittedResource(&lHeapProperties, D3D12_HEAP_FLAG_NONE, &lResourceDesc, D3D12_RESOURCE_STATE_DEPTH_WRITE, &lClearValue, IID_PPV_ARGS(mDepthBuffer.GetAddressOf()));
-		RE12_ASSERT_ERROR(SUCCEEDED(hr), "ID3D12Device5::CreateCommittedResource is failed.");
+		_ERROR_TRACE(SUCCEEDED(hr), "ID3D12Device5::CreateCommittedResource is failed.");
 		constexpr D3D12_DEPTH_STENCIL_VIEW_DESC lDSVDesc{
 			.Format = DXGI_FORMAT_D32_FLOAT,
 			.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D,
@@ -123,7 +125,7 @@ namespace re12::detail
 		lD3D12Device->CreateDepthStencilView(mDepthBuffer.Get(), &lDSVDesc, lDepthStencilHandle);
 
 		hr = lD3D12Device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(mFence.GetAddressOf()));
-		RE12_ASSERT_ERROR(SUCCEEDED(hr), "ID3D12Device5::CreateFence is failed.");
+		_ERROR_TRACE(SUCCEEDED(hr), "ID3D12Device5::CreateFence is failed.");
 		mFenceEvent = CreateEvent(nullptr, false, false, nullptr);
 		mFenceValue = 0;
 
@@ -135,7 +137,7 @@ namespace re12::detail
 			.NodeMask = 0
 		};
 		hr = lD3D12Device->CreateDescriptorHeap(&lImGuiHeapDesc, IID_PPV_ARGS(mImGuiHeap.GetAddressOf()));
-		RE12_ASSERT_ERROR(SUCCEEDED(hr), "ID3D12Device5::CreateDescriptorHeap is failed.");
+		_ERROR_TRACE(SUCCEEDED(hr), "ID3D12Device5::CreateDescriptorHeap is failed.");
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 		ImGuiIO& lInfo = ImGui::GetIO(); (void)lInfo;

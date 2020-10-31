@@ -1,12 +1,10 @@
-#include "window.hpp"
+#include "window.h"
 
-namespace re12::detail
+namespace detail
 {
-	void Window::Initialize(UINT _Width, UINT _Height)
+	void Window::Initialize()
 	{
-		mSize.mWidth = _Width;
-		mSize.mHeight = _Height;
-		RECT lRect = { 0, 0, static_cast<LONG>(mSize.mWidth), static_cast<LONG>(mSize.mHeight) };
+		RECT lRect = { 0, 0, static_cast<LONG>(mSize.x), static_cast<LONG>(mSize.y) };
 		DWORD lStyle = WS_OVERLAPPEDWINDOW ^ WS_MAXIMIZEBOX ^ WS_THICKFRAME | WS_VISIBLE;
 		AdjustWindowRect(&lRect, lStyle, false);
 
