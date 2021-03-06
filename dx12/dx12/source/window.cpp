@@ -1,13 +1,26 @@
-#include "../header/window.h"
-#include "../header/constants.h"
+#include "../include/window.h"
 
-void Window::Initialize()
+void Window::Initialize(const char* _title, UINT _width, UINT _height)
 {
-	RECT rect = { 0, 0, kWindowWidth, kWindowHeight };
+	width_ = _width, height_ = _height;
+	RECT rect = { 0, 0, static_cast<LONG>(width_), static_cast<LONG>(height_) };
 	DWORD style = WS_OVERLAPPEDWINDOW ^ WS_MAXIMIZEBOX ^ WS_THICKFRAME | WS_VISIBLE;
 	AdjustWindowRect(&rect, style, false);
 
-	hwnd = CreateWindowA("Title", kWindowTitle, style, CW_USEDEFAULT, CW_USEDEFAULT, static_cast<int>(rect.right - rect.left), static_cast<int>(rect.bottom - rect.top), nullptr, nullptr, GetModuleHandle(NULL), nullptr);
+	hwnd_ = CreateWindowA(
+		"Title",
+		_title,
+		style,
+		CW_USEDEFAULT,
+		CW_USEDEFAULT,
+		static_cast<int>(rect.right - rect.left),
+		static_cast<int>(rect.bottom - rect.top),
+		nullptr,
+		nullptr,
+		GetModuleHandle(NULL),
+		nullptr);
+
+	ShowWindow(hwnd_, SW_SHOW);
 }
 
 bool Window::Update()
@@ -26,10 +39,4 @@ bool Window::Update()
 		}
 	}
 	return false;
-}
-
-void Window::Show(int _cmdshow)
-{
-	ShowWindow(hwnd, _cmdshow);
-	ShowCursor(kShowCursor);
 }

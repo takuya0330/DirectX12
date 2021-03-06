@@ -18,27 +18,10 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="source\Dx12Test.cpp" />
-    <ClCompile Include="source\engine.cpp" />
-    <ClCompile Include="source\main.cpp" />
-    <ClCompile Include="source\msgproc.cpp" />
-    <ClCompile Include="source\timer.cpp" />
-    <ClCompile Include="source\winmain.cpp" />
-    <ClCompile Include="source\window.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="header\constants.h" />
-    <ClInclude Include="header\Dx12Test.h" />
-    <ClInclude Include="header\engine.h" />
-    <ClInclude Include="header\timer.h" />
-    <ClInclude Include="header\utility.h" />
-    <ClInclude Include="header\window.h" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{361301d2-6e5e-469a-9039-b39dedf21787}</ProjectGuid>
+    <ProjectGuid>{2d531b6f-2103-416c-9b0a-d2e95bd5b41b}</ProjectGuid>
     <RootNamespace>dx12</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -134,12 +117,14 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <FxCompile>
+      <ShaderModel>5.0</ShaderModel>
+    </FxCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -150,15 +135,65 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <FxCompile>
+      <ShaderModel>5.0</ShaderModel>
+    </FxCompile>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="source\d3d12_manager.cpp" />
+    <ClCompile Include="source\gui_helper.cpp" />
+    <ClCompile Include="source\main.cpp" />
+    <ClCompile Include="source\pipeline_manager.cpp" />
+    <ClCompile Include="source\timer.cpp" />
+    <ClCompile Include="source\triangle.cpp" />
+    <ClCompile Include="source\window.cpp" />
+    <ClCompile Include="thirdparty\imgui\imgui.cpp" />
+    <ClCompile Include="thirdparty\imgui\imgui_draw.cpp" />
+    <ClCompile Include="thirdparty\imgui\imgui_impl_dx12.cpp" />
+    <ClCompile Include="thirdparty\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="thirdparty\imgui\imgui_tables.cpp" />
+    <ClCompile Include="thirdparty\imgui\imgui_widgets.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\d3d12_manager.h" />
+    <ClInclude Include="include\graphics_state.h" />
+    <ClInclude Include="include\gui_hepler.h" />
+    <ClInclude Include="include\math.h" />
+    <ClInclude Include="include\pipeline_manager.h" />
+    <ClInclude Include="include\property.h" />
+    <ClInclude Include="include\timer.h" />
+    <ClInclude Include="include\triangle.h" />
+    <ClInclude Include="include\utility.h" />
+    <ClInclude Include="include\window.h" />
+    <ClInclude Include="thirdparty\imgui\imconfig.h" />
+    <ClInclude Include="thirdparty\imgui\imgui.h" />
+    <ClInclude Include="thirdparty\imgui\imgui_impl_dx12.h" />
+    <ClInclude Include="thirdparty\imgui\imgui_impl_win32.h" />
+    <ClInclude Include="thirdparty\imgui\imgui_internal.h" />
+    <ClInclude Include="thirdparty\imgui\imstb_rectpack.h" />
+    <ClInclude Include="thirdparty\imgui\imstb_textedit.h" />
+    <ClInclude Include="thirdparty\imgui\imstb_truetype.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shader\triangle.hlsli" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="shader\triangle_ps.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="shader\triangle_vs.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+    </FxCompile>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

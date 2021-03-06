@@ -1,33 +1,37 @@
 #include <thread>
-#include <sstream>
 
-#include "../header/timer.h"
+#include "../include/timer.h"
 
-void Timer::Initialize(UINT _maxFPS)
+void Timer::Initialize(UINT _fps)
 {
-	last_time = std::chrono::high_resolution_clock::now();
-	delta_time = std::chrono::duration<double>(0.0);
-	frame_interval = std::chrono::duration<double>((_maxFPS == 0) ? 0.0 : 1.0 / _maxFPS);
-	time_stamp = std::chrono::duration<double>(0.0);
-	time_elapsed = std::chrono::duration<double>(0.0);
-	frames = 0;
-	currentFPS = 0;
+	last_time_ = std::chrono::high_resolution_clock::now();
+	delta_time_ = std::chrono::duration<double>(0.0);
+	frame_interval_ = std::chrono::duration<double>((_fps == 0) ? 0.0 : 1.0 / _fps);
+	time_stamp_ = std::chrono::duration<double>(0.0);
+	time_elapsed_ = std::chrono::duration<double>(0.0);
+	frame_count_ = 0;
+	current_fps_ = 0;
 }
+
 void Timer::Update()
 {
-	++frames;
+	++frame_count_;
 
-	std::chrono::high_resolution_clock::time_point current;
-	std::chrono::duration<double> delta;
-	std::chrono::duration<double> sleep;
+	std::chrono::high_resolution_clock::time_point current_time;
+	std::chrono::duration<double> elapsed_time;
+	std::chrono::duration<double> sleep_time;
 
 	while (true)
 	{
-		current = std::chrono::high_resolution_clock::now();
-		delta = std::chrono::duration(current - last_time);
-		sleep = frame_interval - delta;
+		// 現在の時間を取得
+		current_time = std::chrono::high_resolution_clock::now();
+		// 経過時間を算出
+		elapsed_time = std::chrono::duration(current_time - last_time_);
+		// 待機時間を算出
+		sleep_time = frame_interval_ - elapsed_time;
 
-		if (sleep.count() > 0.0)
+		// 待機
+		if (sleep_time.count() > 0.0)
 		{
 			std::this_thread::yield();
 			continue;
@@ -35,20 +39,13 @@ void Timer::Update()
 		break;
 	}
 
-	last_time = current;
-	delta_time = delta;
+	last_time_ = current_time;
+	delta_time_ = elapsed_time;
 
-	if ((time_stamp += delta).count() >= 1.0)
+	if ((time_stamp_ += elapsed_time).count() >= 1.0)
 	{
-		currentFPS = frames;
-		frames = 0;
-		time_stamp = std::chrono::duration<double>(0.0);
+		current_fps_ = frame_count_;
+		frame_count_ = 0;
+		time_stamp_ = std::chrono::duration<double>(0.0);
 	}
-}
-void Timer::Show(const HWND& _hwnd)
-{
-	std::ostringstream outs;
-	outs.precision(4);
-	outs << "FPS : " << currentFPS << " / " << "Frame Time : " << delta_time.count() << " (ms)";
-	SetWindowTextA(_hwnd, outs.str().c_str());
 }
