@@ -1,4 +1,5 @@
 #include "../include/triangle.h"
+#include "../include/d3d12_helper.h"
 #include "../include/utility.h"
 
 bool Triangle::Initialize(ID3D12Device* _device)
@@ -11,76 +12,61 @@ bool Triangle::Initialize(ID3D12Device* _device)
 	constexpr uint32_t indices[] = { 0,1,2 };
 
 	// 頂点バッファーの作成
-	constexpr D3D12_HEAP_PROPERTIES heap_properties = {
-		.Type = D3D12_HEAP_TYPE_UPLOAD,							
-		.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN,
-		.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN,	
-		.CreationNodeMask = 1,										
-		.VisibleNodeMask = 1											
-	};
-	D3D12_RESOURCE_DESC vertex_buffer_desc = {
-		.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER,	
-		.Alignment = 0,												
-		.Width = sizeof(vertices),
-		.Height = 1,											
-		.DepthOrArraySize = 1,										
-		.MipLevels = 1,												
-		.Format = DXGI_FORMAT_UNKNOWN,							
-		.SampleDesc =
-		{
-			.Count = 1,													
-			.Quality = 0												
-		},
-		.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR,				
-		.Flags = D3D12_RESOURCE_FLAG_NONE	
-	};
-	auto hr = _device->CreateCommittedResource(
-		&heap_properties,
-		D3D12_HEAP_FLAG_NONE,
-		&vertex_buffer_desc,
+	auto hr = cd3d12::CreateResource(
+		_device,
+		D3D12_HEAP_TYPE_UPLOAD,
+		D3D12_RESOURCE_DIMENSION_BUFFER,
+		sizeof(vertices),
+		1,
+		1,
+		DXGI_FORMAT_UNKNOWN,
+		D3D12_TEXTURE_LAYOUT_ROW_MAJOR,
+		D3D12_RESOURCE_FLAG_NONE,
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
-		IID_PPV_ARGS(&vertex_buffer_));
+		&vertex_buffer_);
 	if (FAILED(hr))
 	{
-		Debug::Console("CreateCommittedResource failed.");
+		debug::Console("Failed : CreateResource\n");
+		debug::Console(OUTPUT_FILE " : " OUTPUT_LINE "\n");
 		return false;
 	}
-	if (!WriteUploadHeapMemory(vertex_buffer_.Get(), vertices, sizeof(vertices))) return false;
+	if (!cd3d12::WriteUploadHeapMemory(vertex_buffer_.Get(), vertices, sizeof(vertices)))
+	{
+		debug::Console("Failed : WriteUploadHeapMemory\n");
+		debug::Console(OUTPUT_FILE " : " OUTPUT_LINE "\n");
+		return false;
+	}
 	vertex_buffer_view_.BufferLocation = vertex_buffer_->GetGPUVirtualAddress();
 	vertex_buffer_view_.SizeInBytes = sizeof(vertices);
 	vertex_buffer_view_.StrideInBytes = sizeof(Vertex2D);
 
 	// インデックスバッファーの作成
-	D3D12_RESOURCE_DESC index_buffer_desc = {
-		.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER,
-		.Alignment = 0,
-		.Width = sizeof(indices),
-		.Height = 1,
-		.DepthOrArraySize = 1,
-		.MipLevels = 1,
-		.Format = DXGI_FORMAT_UNKNOWN,
-		.SampleDesc =
-		{
-			.Count = 1,
-			.Quality = 0
-		},
-		.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR,
-		.Flags = D3D12_RESOURCE_FLAG_NONE
-	};
-	hr = _device->CreateCommittedResource(
-		&heap_properties,
-		D3D12_HEAP_FLAG_NONE,
-		&index_buffer_desc,
+	hr = cd3d12::CreateResource(
+		_device,
+		D3D12_HEAP_TYPE_UPLOAD,
+		D3D12_RESOURCE_DIMENSION_BUFFER,
+		sizeof(indices),
+		1,
+		1,
+		DXGI_FORMAT_UNKNOWN,
+		D3D12_TEXTURE_LAYOUT_ROW_MAJOR,
+		D3D12_RESOURCE_FLAG_NONE,
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
-		IID_PPV_ARGS(&index_buffer_));
+		&index_buffer_);
 	if (FAILED(hr))
 	{
-		Debug::Console("CreateCommittedResource failed.");
+		debug::Console("Failed : CreateResource\n");
+		debug::Console(OUTPUT_FILE " : " OUTPUT_LINE "\n");
 		return false;
 	}
-	if (!WriteUploadHeapMemory(index_buffer_.Get(), indices, sizeof(indices))) return false;
+	if (!cd3d12::WriteUploadHeapMemory(index_buffer_.Get(), indices, sizeof(indices)))
+	{
+		debug::Console("Failed : WriteUploadHeapMemory\n");
+		debug::Console(OUTPUT_FILE " : " OUTPUT_LINE "\n");
+		return false;
+	}
 	index_buffer_view_.BufferLocation = index_buffer_->GetGPUVirtualAddress();
 	index_buffer_view_.Format = DXGI_FORMAT_R32_UINT;
 	index_buffer_view_.SizeInBytes = sizeof(indices);

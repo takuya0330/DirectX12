@@ -3,3 +3,4 @@ Release/
 .vs/
 *.cso
 *.exe
+*.user

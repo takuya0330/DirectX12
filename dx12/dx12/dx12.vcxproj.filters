@@ -110,6 +110,9 @@
     <ClInclude Include="include\graphics_state.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="include\d3d12_helper.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\triangle.hlsli" />

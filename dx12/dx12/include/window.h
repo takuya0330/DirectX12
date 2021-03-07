@@ -16,7 +16,7 @@ public:
 	Property<UINT> Width{ [this]() { return width_; }, [this](UINT _value) { width_ = _value; } };
 	Property<UINT> Height{ [this]() { return height_; }, [this](UINT _value) { height_ = _value; } };
 private:
-	HWND hwnd_;
-	UINT width_;
-	UINT height_;
+	HWND hwnd_ = {};
+	UINT width_ = 0;
+	UINT height_ = 0;
 };

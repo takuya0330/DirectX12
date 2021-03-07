@@ -3,9 +3,10 @@
 #include "../thirdparty/imgui/imgui_impl_win32.h"
 
 #include "../include/gui_hepler.h"
+#include "../include/d3d12_helper.h"
 #include "../include/utility.h"
 
-bool GuiHelper::Initialize(HWND _hwnd, ID3D12Device* _device, UINT _buffer_count, DXGI_FORMAT _format)
+bool GuiHelper::Initialize(HWND _hwnd, ID3D12Device* _device, UINT _buffer_count)
 {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -24,16 +25,16 @@ bool GuiHelper::Initialize(HWND _hwnd, ID3D12Device* _device, UINT _buffer_count
 		style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 	}
 
-	constexpr D3D12_DESCRIPTOR_HEAP_DESC descriptor_heap_desc = {
-		.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,	
-		.NumDescriptors = 1,								
-		.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE,
-		.NodeMask = 0										
-	};
-	auto hr = _device->CreateDescriptorHeap(&descriptor_heap_desc, IID_PPV_ARGS(&descriptor_heap_));
+	auto hr = cd3d12::CreateDescriptorHeap(
+		_device, 
+		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 
+		1, 
+		D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE, 
+		&descriptor_heap_);
 	if (FAILED(hr))
 	{
-		Debug::Console("CreateDescriptorHeap failed.\n");
+		debug::Console("Failed : CreateDescriptorHeap\n");
+		debug::Console(OUTPUT_FILE " : " OUTPUT_LINE "\n");
 		return false;
 	}
 
@@ -41,7 +42,7 @@ bool GuiHelper::Initialize(HWND _hwnd, ID3D12Device* _device, UINT _buffer_count
 	ImGui_ImplDX12_Init(
 		_device, 
 		_buffer_count, 
-		_format, 
+		DXGI_FORMAT_R8G8B8A8_UNORM,
 		descriptor_heap_.Get(), 
 		descriptor_heap_->GetCPUDescriptorHandleForHeapStart(), 
 		descriptor_heap_->GetGPUDescriptorHandleForHeapStart());

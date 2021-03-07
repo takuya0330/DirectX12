@@ -2,9 +2,14 @@
 #include <Windows.h>
 #include <iostream>
 
-struct Debug
+#define TO_STRING(x) #x
+#define TO_STRING_EX(x) TO_STRING(x)
+#define OUTPUT_FILE TO_STRING_EX(__FILE__)
+#define OUTPUT_LINE TO_STRING_EX(__LINE__)
+
+namespace debug
 {
-	inline static void Console(const char* format, ...)
+	inline void Console(const char* format, ...)
 	{
 		va_list ap;
 		va_start(ap, format);
@@ -12,14 +17,11 @@ struct Debug
 		va_end(ap);
 	}
 
-	inline static void Console(const wchar_t* format, ...)
+	inline void Console(const wchar_t* format, ...)
 	{
 		va_list ap;
 		va_start(ap, format);
 		vwprintf(format, ap);
 		va_end(ap);
 	}
-};
-
-struct ID3D12Resource;
-bool WriteUploadHeapMemory(ID3D12Resource* _resource, const void* _data, uint32_t _size);
+}
