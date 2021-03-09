@@ -13,7 +13,7 @@ public:
 	PipelineManager() = default;
 	~PipelineManager() = default;
 
-	bool Initialize(
+	bool Create(
 		const std::string& _key,
 		ID3D12Device* _device,
 		UINT _parameter_num,

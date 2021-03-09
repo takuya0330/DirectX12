@@ -11,6 +11,7 @@
 #include "../include/graphics_state.h"
 #include "../include/pipeline_manager.h"
 #include "../include/triangle.h"
+#include "../include/texture.h"
 
 class Engine
 {
@@ -104,25 +105,45 @@ int main()
 
 	PipelineManager PSO;
 	ComPtr<ID3DBlob> vs, ps;
-	cd3d12::D3DCompile(L"shader/triangle_vs.hlsl", "vs_5_0", &vs);
-	cd3d12::D3DCompile(L"shader/triangle_ps.hlsl", "ps_5_0", &ps);
-	if (!PSO.Initialize(
-		"Triangle",
+	//cd3d12::D3DCompile(L"shader/geometry2d_vs.hlsl", "vs_5_0", &vs);
+	//cd3d12::D3DCompile(L"shader/geometry2d_ps.hlsl", "ps_5_0", &ps);
+	//if (!PSO.Create(
+	//	"Triangle",
+	//	d3d12.Device,
+	//	0, nullptr,
+	//	0, nullptr,
+	//	cd3d12::ShaderByteCode(vs.Get()),
+	//	cd3d12::ShaderByteCode(ps.Get()),
+	//	{}, {}, {},
+	//	BlendState(BlendMode::eAlpha),
+	//	RasterizerState(RasterizerMode::e2D),
+	//	DepthStencilState(DepthStencilMode::e2D),
+	//	{ Geometry2D::kInputElement, Geometry2D::kInputElementNum })) return 0;
+	//debug::Console("Successed : PipelineManager::Create(Triangle)\n");
+
+	cd3d12::D3DCompile(L"shader/texture_vs.hlsl", "vs_5_0", &vs);
+	cd3d12::D3DCompile(L"shader/texture_ps.hlsl", "ps_5_0", &ps);
+	auto range = cd3d12::DescriptorRange(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
+	auto table = cd3d12::RootDescriptorTable(1, &range);
+	auto param = cd3d12::RootParamterDescriptorTable(table);
+	auto sampler = StaticSamplerState(SamplerMode::eClamp);
+	if (!PSO.Create(
+		"Texture",
 		d3d12.Device,
-		0, nullptr,
-		0, nullptr,
-		cd3d12::GetShaderByteCode(vs.Get()),
-		cd3d12::GetShaderByteCode(ps.Get()),
+		1, &param,
+		1, &sampler,
+		cd3d12::ShaderByteCode(vs.Get()),
+		cd3d12::ShaderByteCode(ps.Get()),
 		{}, {}, {},
 		BlendState(BlendMode::eAlpha),
 		RasterizerState(RasterizerMode::e2D),
 		DepthStencilState(DepthStencilMode::e2D),
-		{ Triangle::kInputElement, Triangle::kInputElementNum })) return 0;
-	debug::Console("Successed : PipelineManager::Initialize\n");
+		{ Geometry2D::kInputElement, Geometry2D::kInputElementNum })) return 0;
+	debug::Console("Successed : PipelineManager::Create(Texture)\n");
 
-	Triangle triangle;
-	if (!triangle.Initialize(d3d12.Device)) return 0;
-	debug::Console("Successed : Triangle::Initialize\n");
+	//Triangle triangle(d3d12.Device);
+
+	Texture texrure(&d3d12, "asset/texture.tga");
 
 	while (window.Update())
 	{
@@ -145,12 +166,14 @@ int main()
 		d3d12.SetRenderTargets();
 		d3d12.SetViewport(window.Width, window.Height);
 
-		PSO.Bind(d3d12.GraphicsCommandList, "Triangle");
+		//PSO.Bind(d3d12.GraphicsCommandList, "Triangle");
+		//triangle.Draw(d3d12.GraphicsCommandList);
 
-		triangle.Draw(d3d12.GraphicsCommandList);
+		PSO.Bind(d3d12.GraphicsCommandList, "Texture");
+		texrure.Draw(d3d12.GraphicsCommandList);
 
 		gui.Render(d3d12.GraphicsCommandList);
-		
+
 		d3d12.BarrierPresent();
 		d3d12.ExecuteCommandQueue();
 		d3d12.Present(0);

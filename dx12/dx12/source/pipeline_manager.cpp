@@ -2,7 +2,7 @@
 #include "../include/d3d12_helper.h"
 #include "../include/utility.h"
 
-bool PipelineManager::Initialize(
+bool PipelineManager::Create(
 	const std::string& _key,
 	ID3D12Device* _device,
 	UINT _parameter_num,
@@ -28,7 +28,7 @@ bool PipelineManager::Initialize(
 	}
 
 	// ルートシグネチャの作成
-	D3D12_ROOT_SIGNATURE_DESC root_signature_desc = cd3d12::CreateRootSignatureDesc(
+	D3D12_ROOT_SIGNATURE_DESC root_signature_desc = cd3d12::RootSignatureDesc(
 		_parameter_num, _parameters, _static_sampler_num, _static_samplers);
 	ComPtr<ID3DBlob> blob, err;
 	auto hr = D3D12SerializeRootSignature(
@@ -55,7 +55,7 @@ bool PipelineManager::Initialize(
 	root_signatures_.insert(std::make_pair(_key, root_signature));
 
 	// パイプラインステートの作成
-	D3D12_GRAPHICS_PIPELINE_STATE_DESC pipeline_state_desc = cd3d12::CreatePipelineStateDesc(
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC pipeline_state_desc = cd3d12::PipelineStateDesc(
 		root_signature.Get(), _vs, _ps, _ds, _hs, _gs, _blend_desc, _rasterizer_desc, _depth_stencil_desc, _input_layout_desc);
 	ComPtr<ID3D12PipelineState> pipeline_state;
 	hr = _device->CreateGraphicsPipelineState(&pipeline_state_desc, IID_PPV_ARGS(&pipeline_state));

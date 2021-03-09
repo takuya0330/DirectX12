@@ -153,6 +153,7 @@
     <ClCompile Include="source\gui_helper.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\pipeline_manager.cpp" />
+    <ClCompile Include="source\texture.cpp" />
     <ClCompile Include="source\timer.cpp" />
     <ClCompile Include="source\triangle.cpp" />
     <ClCompile Include="source\window.cpp" />
@@ -166,11 +167,13 @@
   <ItemGroup>
     <ClInclude Include="include\d3d12_helper.h" />
     <ClInclude Include="include\d3d12_manager.h" />
+    <ClInclude Include="include\geometry2d.h" />
     <ClInclude Include="include\graphics_state.h" />
     <ClInclude Include="include\gui_hepler.h" />
     <ClInclude Include="include\math.h" />
     <ClInclude Include="include\pipeline_manager.h" />
     <ClInclude Include="include\property.h" />
+    <ClInclude Include="include\texture.h" />
     <ClInclude Include="include\timer.h" />
     <ClInclude Include="include\triangle.h" />
     <ClInclude Include="include\utility.h" />
@@ -185,16 +188,28 @@
     <ClInclude Include="thirdparty\imgui\imstb_truetype.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="shader\triangle.hlsli" />
+    <None Include="shader\geometry2d.hlsli" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="shader\triangle_ps.hlsl">
+    <FxCompile Include="shader\geometry2d_ps.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
     </FxCompile>
-    <FxCompile Include="shader\triangle_vs.hlsl">
+    <FxCompile Include="shader\geometry2d_vs.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="shader\texture_ps.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="shader\texture_vs.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

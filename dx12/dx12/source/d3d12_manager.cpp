@@ -366,26 +366,30 @@ bool D3D12Manager::CreateRenderTarget()
 
 bool D3D12Manager::CreateDepthStencil(UINT _width, UINT _height)
 {
+	auto heap_properties = cd3d12::HeapProperties(D3D12_HEAP_TYPE_DEFAULT);
+	auto resource_desc = cd3d12::ResourceDesc(
+		D3D12_RESOURCE_DIMENSION_TEXTURE2D,
+		_width,
+		_height,
+		1,
+		0,
+		DXGI_FORMAT_D32_FLOAT,
+		D3D12_TEXTURE_LAYOUT_UNKNOWN,
+		D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
 	constexpr D3D12_CLEAR_VALUE clear_value = {
 		.Format = DXGI_FORMAT_D32_FLOAT, // ƒŠƒ\[ƒX‚Æ‡‚í‚¹‚é
 		.DepthStencil = {.Depth = 1.0f,	.Stencil = 0 }
 	};
-	auto hr = cd3d12::CreateResource(
-		device_.Get(),
-		D3D12_HEAP_TYPE_DEFAULT,
-		D3D12_RESOURCE_DIMENSION_TEXTURE2D,
-		_width,
-		_height,
-		0,
-		DXGI_FORMAT_D32_FLOAT,
-		D3D12_TEXTURE_LAYOUT_UNKNOWN,
-		D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL,
+	auto hr = device_->CreateCommittedResource(
+		&heap_properties,
+		D3D12_HEAP_FLAG_NONE,
+		&resource_desc,
 		D3D12_RESOURCE_STATE_DEPTH_WRITE,
 		&clear_value,
-		&depth_buffer_);
+		IID_PPV_ARGS(&depth_buffer_));
 	if (FAILED(hr))
 	{
-		debug::Console("Failed : CreateResource\n");
+		debug::Console("Failed : CreateCommittedResource\n");
 		debug::Console(OUTPUT_FILE " : " OUTPUT_LINE "\n");
 		return false;
 	}

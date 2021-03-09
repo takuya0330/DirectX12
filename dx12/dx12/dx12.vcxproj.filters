@@ -54,6 +54,9 @@
     <ClCompile Include="source\pipeline_manager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="source\texture.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\window.h">
@@ -113,12 +116,20 @@
     <ClInclude Include="include\d3d12_helper.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="include\texture.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="include\geometry2d.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shader\triangle.hlsli" />
+    <None Include="shader\geometry2d.hlsli" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="shader\triangle_ps.hlsl" />
-    <FxCompile Include="shader\triangle_vs.hlsl" />
+    <FxCompile Include="shader\geometry2d_ps.hlsl" />
+    <FxCompile Include="shader\geometry2d_vs.hlsl" />
+    <FxCompile Include="shader\texture_ps.hlsl" />
+    <FxCompile Include="shader\texture_vs.hlsl" />
   </ItemGroup>
 </Project>

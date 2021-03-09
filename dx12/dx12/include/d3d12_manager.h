@@ -11,8 +11,6 @@
 
 constexpr UINT kFrameBufferCount = 2;
 
-using namespace Microsoft::WRL;
-
 class D3D12Manager
 {
 public:
@@ -33,8 +31,12 @@ public:
 	void WaitPreviousFrame();
 
 	Property<ID3D12Device*> Device{ [this]() { return device_.Get(); }, nullptr };
+	Property<ID3D12CommandQueue*> CommandQueue{ [this]() { return command_queue_.Get(); }, nullptr };
 	Property<ID3D12GraphicsCommandList*> GraphicsCommandList{ [this]() { return command_list_.Get(); }, nullptr };
 private:
+	template<class T>
+	using ComPtr = Microsoft::WRL::ComPtr<T>;
+
 	bool CreateDebugLayer();
 	bool CreateFactory(UINT _dxgiflags);
 	bool CreateDevice();

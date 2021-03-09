@@ -27,19 +27,7 @@ namespace cd3d12
 		return _device->CreateDescriptorHeap(&desc, IID_PPV_ARGS(_heap));
 	}
 
-	inline HRESULT CreateResource(
-		ID3D12Device* _device,
-		D3D12_HEAP_TYPE _type,
-		D3D12_RESOURCE_DIMENSION _dimension,
-		UINT64 _width,
-		UINT _height,
-		UINT16 _miplevels,
-		DXGI_FORMAT _format,
-		D3D12_TEXTURE_LAYOUT _layout,
-		D3D12_RESOURCE_FLAGS _flags,
-		D3D12_RESOURCE_STATES _states,
-		const D3D12_CLEAR_VALUE* _value,
-		ID3D12Resource** _resource)
+	inline D3D12_HEAP_PROPERTIES HeapProperties(D3D12_HEAP_TYPE _type)
 	{
 		D3D12_HEAP_PROPERTIES properties = {
 			.Type = _type,
@@ -48,25 +36,32 @@ namespace cd3d12
 			.CreationNodeMask = 1,										// 0,1‚Ç‚¿‚ç‚Å‚à“¯‚¶
 			.VisibleNodeMask = 1											// CreationNodeMask‚Æ“¯‚¶’l‚Å‚ ‚é•K—v‚ª‚ ‚é
 		};
-		D3D12_RESOURCE_DESC resource_desc = {
+		return properties;
+	}
+
+	inline D3D12_RESOURCE_DESC ResourceDesc(
+		D3D12_RESOURCE_DIMENSION _dimension, 
+		UINT64 _width,
+		UINT _height,
+		UINT16 _depth_or_array_size,
+		UINT16 _miplevels,
+		DXGI_FORMAT _format,
+		D3D12_TEXTURE_LAYOUT _layout,
+		D3D12_RESOURCE_FLAGS _flags)
+	{
+		D3D12_RESOURCE_DESC desc = {
 			.Dimension = _dimension,
 			.Alignment = 0,
 			.Width = _width,
 			.Height = _height,
-			.DepthOrArraySize = 1,
+			.DepthOrArraySize = _depth_or_array_size,
 			.MipLevels = _miplevels,
 			.Format = _format,
 			.SampleDesc = {.Count = 1, .Quality = 0 },
 			.Layout = _layout,
 			.Flags = _flags
 		};
-		return _device->CreateCommittedResource(
-			&properties,
-			D3D12_HEAP_FLAG_NONE,
-			&resource_desc,
-			_states,
-			_value,
-			IID_PPV_ARGS(_resource));
+		return desc;
 	}
 
 	inline bool WriteUploadHeapMemory(ID3D12Resource* _resource, const void* _data, UINT32 _size)
@@ -81,7 +76,7 @@ namespace cd3d12
 		return true;
 	}
 
-	inline D3D12_RESOURCE_BARRIER CreateBarrierTransition(
+	inline D3D12_RESOURCE_BARRIER BarrierTransition(
 		ID3D12Resource* _resource,
 		D3D12_RESOURCE_STATES _before,
 		D3D12_RESOURCE_STATES _after)
@@ -101,7 +96,46 @@ namespace cd3d12
 		return barrier;
 	}
 
-	inline D3D12_ROOT_SIGNATURE_DESC CreateRootSignatureDesc(
+	inline D3D12_DESCRIPTOR_RANGE DescriptorRange(
+		D3D12_DESCRIPTOR_RANGE_TYPE _type,
+		UINT _descriptor_num,
+		UINT _base_shader_register,
+		UINT _register_space = 0)
+	{
+		D3D12_DESCRIPTOR_RANGE descriptor_range = {
+			.RangeType = _type,
+			.NumDescriptors = _descriptor_num,
+			.BaseShaderRegister = _base_shader_register,
+			.RegisterSpace = _register_space,
+			.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND
+		};
+		return descriptor_range;
+	}
+
+	inline D3D12_ROOT_DESCRIPTOR_TABLE RootDescriptorTable(
+		UINT _range_num,
+		const D3D12_DESCRIPTOR_RANGE* _range)
+	{
+		D3D12_ROOT_DESCRIPTOR_TABLE descriptor_table = {
+			.NumDescriptorRanges = _range_num,
+			.pDescriptorRanges = _range
+		};
+		return descriptor_table;
+	}
+
+	inline D3D12_ROOT_PARAMETER RootParamterDescriptorTable(
+		const D3D12_ROOT_DESCRIPTOR_TABLE& _table,
+		D3D12_SHADER_VISIBILITY _shader_visibility = D3D12_SHADER_VISIBILITY_ALL)
+	{
+		D3D12_ROOT_PARAMETER root_parameter = {
+			.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE,
+			.DescriptorTable = _table,
+			.ShaderVisibility = _shader_visibility
+		};
+		return root_parameter;
+	}
+
+	inline D3D12_ROOT_SIGNATURE_DESC RootSignatureDesc(
 		UINT _parameter_num, 
 		const D3D12_ROOT_PARAMETER* _parameters, 
 		UINT _static_sampler_num, 
@@ -117,12 +151,17 @@ namespace cd3d12
 		return desc;
 	}
 
-	inline D3D12_SHADER_BYTECODE GetShaderByteCode(ID3DBlob* _blob)
+	inline D3D12_SHADER_BYTECODE ShaderByteCode(ID3DBlob* _blob)
 	{
 		return { _blob->GetBufferPointer(), _blob->GetBufferSize() };
 	}
 
-	inline D3D12_GRAPHICS_PIPELINE_STATE_DESC CreatePipelineStateDesc(
+	inline D3D12_INPUT_LAYOUT_DESC InputLayoutDesc(const D3D12_INPUT_ELEMENT_DESC* _desc, UINT _num)
+	{
+		return { _desc, _num };
+	}
+
+	inline D3D12_GRAPHICS_PIPELINE_STATE_DESC PipelineStateDesc(
 		ID3D12RootSignature* _root_signature,
 		const D3D12_SHADER_BYTECODE& _vs,
 		const D3D12_SHADER_BYTECODE& _ps,
