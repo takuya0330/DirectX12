@@ -90,7 +90,7 @@ Texture::Texture(D3D12Manager* _d3d12, const char* _filename)
 
 	// テクスチャのロード
 	int channels = 0;
-	auto* image = stbi_load(_filename, &size_.x, &size_.y, &channels, 0);
+	auto* image = stbi_load(_filename, &size_.x, &size_.y, &channels, 4);
 
 	// テクスチャバッファの作成
 	auto texture_properties = cd3d12::HeapProperties(D3D12_HEAP_TYPE_DEFAULT);
@@ -118,16 +118,17 @@ Texture::Texture(D3D12Manager* _d3d12, const char* _filename)
 	}
 
 	// ステージングバッファの作成
-	D3D12_PLACED_SUBRESOURCE_FOOTPRINT layouts = {};
-	UINT row_num = 0;
-	UINT64 row_size_in_bytes = 0, total_bytes = 0;
-	device->GetCopyableFootprints(&texture_buffer_desc, 0, 1, 0, &layouts, &row_num, &row_size_in_bytes, &total_bytes);
+	D3D12_PLACED_SUBRESOURCE_FOOTPRINT footprint = {};
+	UINT row_num;
+	UINT64 row_size, required_size;
+	device->GetCopyableFootprints(
+		&texture_buffer_desc, 0, 1, 0, &footprint, &row_num, &row_size, &required_size);
 
 	ComPtr<ID3D12Resource> staging_buffer;
 	auto staging_properties = cd3d12::HeapProperties(D3D12_HEAP_TYPE_UPLOAD);
 	auto staging_buffer_desc = cd3d12::ResourceDesc(
 		D3D12_RESOURCE_DIMENSION_BUFFER,
-		total_bytes,
+		required_size,
 		1,
 		1,
 		1,
@@ -149,7 +150,6 @@ Texture::Texture(D3D12Manager* _d3d12, const char* _filename)
 	}
 
 	// ステージングバッファに画像データをコピー
-	const uint image_pitch = size_.x * sizeof(uint);
 	void* mapped = nullptr;
 	hr = staging_buffer->Map(0, nullptr, &mapped);
 	if (FAILED(hr))
@@ -158,11 +158,12 @@ Texture::Texture(D3D12Manager* _d3d12, const char* _filename)
 		debug::Console(OUTPUT_FILE " : " OUTPUT_LINE "\n");
 		return;
 	}
+
 	for (UINT h = 0; h < row_num; ++h)
 	{
-		auto dst = static_cast<char*>(mapped) + h * row_size_in_bytes;
-		auto src = image + h * image_pitch;
-		memcpy(dst, src, image_pitch);
+		auto dst = static_cast<char*>(mapped) + h * footprint.Footprint.RowPitch;
+		auto src = image + h * row_size;
+		memcpy(dst, src, footprint.Footprint.RowPitch);
 	}
 	staging_buffer->Unmap(0, nullptr);
 
@@ -186,7 +187,7 @@ Texture::Texture(D3D12Manager* _d3d12, const char* _filename)
 	D3D12_TEXTURE_COPY_LOCATION copy_location = {
 		.pResource = staging_buffer.Get(),
 		.Type = D3D12_TEXTURE_COPY_TYPE_PLACED_FOOTPRINT,
-		.PlacedFootprint = layouts,
+		.PlacedFootprint = footprint,
 	};
 	command_list->CopyTextureRegion(&upload_location, 0, 0, 0, &copy_location, nullptr);
 

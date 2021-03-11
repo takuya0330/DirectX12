@@ -140,6 +140,7 @@ using int2 = Type2<int>;
 using int3 = Type3<int>;
 using int4 = Type4<int>;
 using uint = unsigned int;
+using uint8 = unsigned char;
 using uint64 = unsigned long long;
 using uint2 = Type2<uint>;
 using uint3 = Type3<uint>;

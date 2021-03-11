@@ -24,5 +24,5 @@ private:
 	int2 size_;
 	ComPtr<ID3D12Resource> texture_buffer_;
 	ComPtr<ID3D12DescriptorHeap> texture_heap_;
-	D3D12_GPU_DESCRIPTOR_HANDLE texture_handle_;
+	D3D12_GPU_DESCRIPTOR_HANDLE texture_handle_ = {};
 };
